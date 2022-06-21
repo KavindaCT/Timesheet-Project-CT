@@ -12,11 +12,10 @@ export default class Week extends LightningElement {
     ];
 
     set currentWeek(value) {
-        this.week = value;
-        this.weekDays = [];
-
         var weekStart = new Date(this.currentWeek.weekStart);
         var weekEnding = new Date(this.currentWeek.weekEnding);
+        this.week = value;
+        this.weekDays = [];
 
         // { dayId: 0, day: 'Mon', date: '01 May', disabled: boolean };
         for(let i = 0; i < 7; i++) {

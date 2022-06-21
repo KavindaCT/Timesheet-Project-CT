@@ -11,13 +11,13 @@
         </lightning-layout-item>
         <lightning-layout-item size="12" class="buttons">
             <lightning-button variant="destructive-text" label="Delete timesheet" title="" onclick={handleClickDelete}
-                class="deletebutton slds-m-around_small slds-float_left"></lightning-button>
+                class="deletebutton slds-var-m-around_small slds-float_left"></lightning-button>
             <lightning-button variant="brand" label="Cancel" onclick={handleClickCancel}
-                class="cancelbutton slds-m-around_small slds-float_right"></lightning-button>
+                class="cancelbutton slds-var-m-around_small slds-float_right"></lightning-button>
             <lightning-button variant="brand" label="Submit" value="Draft" onclick={handleClickSubmit}
-                class="submitbutton slds-m-around_small slds-float_right"></lightning-button>
+                class="submitbutton slds-var-m-around_small slds-float_right"></lightning-button>
             <lightning-button variant="neutral" label="Save draft" title="Primary action" onclick={handleClickDraft}
-                class="draftbutton slds-m-around_small slds-float_right"></lightning-button>
+                class="draftbutton slds-var-m-around_small slds-float_right"></lightning-button>
         </lightning-layout-item>
     </lightning-layout>
 
@@ -34,7 +34,7 @@
                 <div class="slds-modal__header">
                     <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Submit Timesheet</h2>
                 </div>
-                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
                     <lightning-combobox
                         name="Approvers"
                         label="Select Approvers"

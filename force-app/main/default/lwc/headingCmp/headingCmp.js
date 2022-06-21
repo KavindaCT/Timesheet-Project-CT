@@ -58,7 +58,7 @@ export default class HeadingCmp extends LightningElement {
             this.disableNextButton = false;
             
         }
-        if(this.currentWeekNumber == 0){
+        if(this.currentWeekNumber === 0){
             this.disablePreviousButton = true;
         }
     }
@@ -71,7 +71,7 @@ export default class HeadingCmp extends LightningElement {
             this.disableNextButton = false;
             this.disablePreviousButton = false;
         }
-        if(this.currentWeekNumber == this.weeks.length-1){
+        if(this.currentWeekNumber === this.weeks.length-1){
             this.disableNextButton = true;
         }
     }
