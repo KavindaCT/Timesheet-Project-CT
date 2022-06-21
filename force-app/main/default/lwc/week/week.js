@@ -14,7 +14,6 @@ export default class Week extends LightningElement {
     set currentWeek(value) {
         this.week = value;
         this.weekDays = [];
-
         var weekStart = new Date(this.currentWeek.weekStart);
         var weekEnding = new Date(this.currentWeek.weekEnding);
 
