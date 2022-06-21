@@ -1,5 +1,12 @@
 <template>
     <lightning-card  title="My Payroll"> 
-           <c-timesheet-management onsetview={setview}></c-timesheet-management>
-        </lightning-card>
+        <lightning-layout>
+            <lightning-layout-item>
+                <c-payroll-header-cmp></c-payroll-header-cmp>
+            </lightning-layout-item>
+            <lightning-layout-item>
+                <c-timesheet-management onsetview={setview}></c-timesheet-management>
+            </lightning-layout-item>
+        </lightning-layout>    
+    </lightning-card>
 </template>
