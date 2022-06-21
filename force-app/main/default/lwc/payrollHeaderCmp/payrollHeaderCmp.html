@@ -1,8 +1,8 @@
 <template>
-    <lightning-layout class="slds-tabs_card">
+    <lightning-layout>
         <lightning-layout-item class="slds-box" size="2">
             <p>Salary</p>
-            <button type="submit" class="slds-button slds-button_brand slds-button_stretch viewbutton" onclick={viewSalary}>View</button>
+            <button type="submit" class="slds-button slds-button_stretch viewbutton" onclick={viewSalary}>View</button>
         </lightning-layout-item>
         <lightning-layout-item class="slds-box" size="2">
             <p>Earnings YTD</p>
@@ -12,7 +12,7 @@
         </lightning-layout-item>
         <lightning-layout-item class="slds-box" size="2">
             <p>Next Payment Date</p>
-            <p class="date">12 Jun</p>
+            <div class="slds-text-heading_large date">12 Jun</div>
         </lightning-layout-item>
     </lightning-layout>
 </template>
