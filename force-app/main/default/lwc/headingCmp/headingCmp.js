@@ -8,7 +8,7 @@ export default class HeadingCmp extends LightningElement {
     date;
     currentWeekNumber = 0;
 
-    Draft = 'Draft';
+    Draft = 'Draft'; //status
     disablePreviousButton = true;
     disableNextButton = false;
 
