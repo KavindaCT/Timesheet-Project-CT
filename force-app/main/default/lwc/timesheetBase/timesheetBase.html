@@ -1,0 +1,8 @@
+<template>
+    <template if:true={viewDashboard}>
+        <c-payroll-dashboard onsetview={setView}></c-payroll-dashboard>
+    </template>
+    <template if:false={viewDashboard}>
+        <c-time-sheet-cmp time-period={timePeriod} timesheet-id={timesheetId}></c-time-sheet-cmp>
+    </template>
+</template>

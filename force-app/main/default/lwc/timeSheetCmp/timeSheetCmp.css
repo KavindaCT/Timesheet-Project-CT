@@ -1,0 +1,34 @@
+lightning-layout{
+    background-color: rgb(243, 249, 252);
+    border: black;
+    border-width: 5;
+    padding: 10px;
+}
+.deletebutton.hover{
+    background-color: black;
+}
+h1{
+    font-size: 25px;
+    font-weight: bold;
+    color: rgb(69, 69, 93);
+}
+.buttons{
+    font-weight: bold;
+}
+.cancelbutton{
+    --slds-c-button-brand-color-background: rgb(137, 135, 137);
+    --slds-c-button-brand-color-border:rgb(85, 83, 85);
+    
+}
+.cancelbutton:hover{
+    --slds-c-button-brand-color-background-hover: rgb(85, 83, 85);
+    --slds-c-button-brand-color-border-hover:rgb(85, 83, 85);
+}
+.submitbutton{
+    --slds-c-button-brand-color-background: rgb(20, 179, 68);
+    --slds-c-button-brand-color-border: rgb(18, 104, 44);
+}
+.submitbutton:hover{
+    --slds-c-button-brand-color-background-hover: rgb(18, 104, 44);
+    --slds-c-button-brand-color-border-hover: rgb(18, 104, 44);
+}

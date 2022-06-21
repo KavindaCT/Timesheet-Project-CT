@@ -1,0 +1,29 @@
+<template>
+    <lightning-card>
+        <lightning-layout multiple-rows class="slds-var-p-around_small">
+            <lightning-layout-item size="12">
+                <lightning-layout>
+                    <lightning-layout-item size="3">
+                        Earnings Rate
+                    </lightning-layout-item>
+                    <lightning-layout-item size="1" for:each={weekDays} for:item="weekday" key={weekday.day}>
+                        {weekday.day}<br>{weekday.date}
+                    </lightning-layout-item>
+                    <lightning-layout-item size="1">
+                        <div>Hours</div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>
+            <!-- BEGIN::Earnings -->
+            <lightning-layout-item size="12" for:each={earnings} for:item="earning" key={earning.Id}>
+                <c-earning earning={earning} week-days={weekDays} onremove={removeEarning}></c-earning>
+            </lightning-layout-item>
+            <!-- BEGIN::Earnings -->
+            <!-- BEGIN::Add another row button -->
+            <lightning-layout-item class="slds-var-m-top_small">
+                <lightning-button label="+ Add another line" onclick={addNewEarning}></lightning-button>
+            </lightning-layout-item>
+            <!-- END::Add another row button -->
+        </lightning-layout>
+    </lightning-card>
+</template>

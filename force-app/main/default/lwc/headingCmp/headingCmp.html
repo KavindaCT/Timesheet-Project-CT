@@ -1,0 +1,24 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item class="slds-box" size="7">
+            <div class="subhead">Status</div>
+            <div class="data">{Draft}</div>
+        </lightning-layout-item>
+        <lightning-layout-item class="slds-box" size="3">
+            <div class="subhead">Week ending</div>
+            <lightning-button-icon icon-name="utility:chevronleft" alternative-text="Previous" class="previousicon"
+                onclick={switchTopreviousWeek}>
+            </lightning-button-icon>
+            <p class="data date">
+                {date}
+            </p>
+            <lightning-button-icon icon-name="utility:chevronright" alternative-text="Next" class="nexticon"
+                onclick={switchToNextWeek}>
+            </lightning-button-icon>
+        </lightning-layout-item>
+        <lightning-layout-item class="slds-box monthlyTotal" size="2">
+            <div class="subhead">Monthly Total</div>
+            <div class="data">0.00</div>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

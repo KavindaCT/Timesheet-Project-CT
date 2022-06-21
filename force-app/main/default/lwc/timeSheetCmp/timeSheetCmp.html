@@ -1,0 +1,54 @@
+<template>
+    <lightning-layout multiple-rows>
+        <lightning-layout-item size="12">
+            <h1>TimeSheet for {timePeriod}</h1>
+        </lightning-layout-item>
+        <lightning-layout-item size="12">
+            <c-heading-cmp time-period={timePeriod} onchangeweek={changeWeek}></c-heading-cmp>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" if:true={activeWeek}>
+            <c-week current-week={activeWeek}></c-week>
+        </lightning-layout-item>
+        <lightning-layout-item size="12" class="buttons">
+            <lightning-button variant="destructive-text" label="Delete timesheet" title="" onclick={handleClickDelete}
+                class="deletebutton slds-m-around_small slds-float_left"></lightning-button>
+            <lightning-button variant="brand" label="Cancel" onclick={handleClickCancel}
+                class="cancelbutton slds-m-around_small slds-float_right"></lightning-button>
+            <lightning-button variant="brand" label="Submit" value="Draft" onclick={handleClickSubmit}
+                class="submitbutton slds-m-around_small slds-float_right"></lightning-button>
+            <lightning-button variant="neutral" label="Save draft" title="Primary action" onclick={handleClickDraft}
+                class="draftbutton slds-m-around_small slds-float_right"></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <!-- BEGIN::Approver selection modal -->
+    <template if:true={openModal}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={cancelApprovers}>
+                    <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small">
+                    </lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Submit Timesheet</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-combobox
+                        name="Approvers"
+                        label="Select Approvers"
+                        value={approver}
+                        options={availableApprovers}
+                    ></lightning-combobox>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={cancelApprovers}>Cancel</button>
+                    <button class="slds-button slds-button_brand">Save</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+    <!-- END::Approver selection modal -->
+</template>

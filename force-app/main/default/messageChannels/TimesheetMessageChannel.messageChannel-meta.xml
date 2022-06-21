@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>This is a Lightning Message Channel for the Timesheet Project.</description>
+    <isExposed>true</isExposed>
+    <lightningMessageFields>
+        <description>The current timesheet Id that we are editing</description>
+        <fieldName>timesheetId</fieldName>
+    </lightningMessageFields>
+    <lightningMessageFields>
+        <description>The current timesheet name that we are editing</description>
+        <fieldName>timesheetName</fieldName>
+    </lightningMessageFields>
+    <masterLabel>TimesheetMessageChannel</masterLabel>
+</LightningMessageChannel>
