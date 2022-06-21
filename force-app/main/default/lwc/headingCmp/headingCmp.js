@@ -9,6 +9,8 @@ export default class HeadingCmp extends LightningElement {
     currentWeekNumber = 0;
 
     Draft = 'Draft';
+    disablePreviousButton = true;
+    disableNextButton = false;
 
     connectedCallback() {
         if (this.timePeriod) {
@@ -51,6 +53,13 @@ export default class HeadingCmp extends LightningElement {
         if (this.currentWeekNumber > 0) {
             this.currentWeekNumber -= 1;
             this.handleSetWeek(this.currentWeekNumber);
+
+            this.disablePreviousButton = false;
+            this.disableNextButton = false;
+            
+        }
+        if(this.currentWeekNumber == 0){
+            this.disablePreviousButton = true;
         }
     }
 
@@ -58,6 +67,12 @@ export default class HeadingCmp extends LightningElement {
         if (this.currentWeekNumber < this.weeks.length) {
             this.currentWeekNumber += 1;
             this.handleSetWeek(this.currentWeekNumber);
+
+            this.disableNextButton = false;
+            this.disablePreviousButton = false;
+        }
+        if(this.currentWeekNumber == this.weeks.length-1){
+            this.disableNextButton = true;
         }
     }
 

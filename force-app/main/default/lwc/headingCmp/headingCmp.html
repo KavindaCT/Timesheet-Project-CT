@@ -1,24 +1,27 @@
 <template>
-    <lightning-layout>
+    <lightning-card>
+    <lightning-layout class="slds-p-horizontal_small">
         <lightning-layout-item class="slds-box" size="7">
-            <div class="subhead">Status</div>
-            <div class="data">{Draft}</div>
+            <div class="slds-text-heading_small"><b>Status</b></div>
+            <div class="slds-text-heading_large slds-p-top_x-small"><b>{Draft}</b></div>
         </lightning-layout-item>
         <lightning-layout-item class="slds-box" size="3">
-            <div class="subhead">Week ending</div>
-            <lightning-button-icon icon-name="utility:chevronleft" alternative-text="Previous" class="previousicon"
-                onclick={switchTopreviousWeek}>
+            <div class="slds-text-heading_small"><b>Week ending</b></div>
+            <lightning-button-icon icon-name="utility:chevronleft" alternative-text="Previous" class="slds-float_left slds-p-top_x-small"
+                onclick={switchTopreviousWeek} disabled={disablePreviousButton}>
             </lightning-button-icon>
-            <p class="data date">
+            <p class="slds-text-heading_large slds-float_left slds-p-horizontal_large slds-p-top_x-small"><b>
                 {date}
+                </b>
             </p>
-            <lightning-button-icon icon-name="utility:chevronright" alternative-text="Next" class="nexticon"
-                onclick={switchToNextWeek}>
+            <lightning-button-icon icon-name="utility:chevronright" alternative-text="Next" class="slds-float_right slds-p-top_x-small"
+                onclick={switchToNextWeek} disabled={disableNextButton}>
             </lightning-button-icon>
         </lightning-layout-item>
-        <lightning-layout-item class="slds-box monthlyTotal" size="2">
-            <div class="subhead">Monthly Total</div>
-            <div class="data">0.00</div>
+        <lightning-layout-item class="slds-box" size="2">
+            <div class="slds-text-heading_small slds-text-align_right"><b>Monthly Total</b></div>
+            <div class="slds-text-heading_large slds-p-top_x-small slds-text-align_right"><b>0.00</b></div>
         </lightning-layout-item>
     </lightning-layout>
+</lightning-card>
 </template>

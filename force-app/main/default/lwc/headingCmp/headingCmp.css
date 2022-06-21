@@ -1,28 +1,3 @@
-lightning-layout{
-    background-color: rgb(243, 249, 252);
-    padding: 15px;
-}
 .slds-box{
-    background-color: white;
-    font-weight: bold;
-}
-.subhead{
-    font-size: 18px;
-}
-.previousicon{
-    float: left;
-}
-.nexticon{
-    float: right;
-}
-.date{
-    float: left;
-    padding-left: 12%;
-}
-.monthlyTotal{
-    text-align: end;
-    padding-right: 20px;
-}
-.data{
-    font-size:  30px;
+    
 }
