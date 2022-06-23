@@ -1,4 +1,5 @@
 public with sharing class TimesheetEarning {
+    @AuraEnabled(cacheable=true)
     public static List<earningsWrapper> getEarnings(List<Timesheet_Day__c> timesheetDays) {
         List<earningsWrapper> earnings = new List<earningsWrapper>();
         List<String> earningTypes = new List<String>();
@@ -38,6 +39,7 @@ public with sharing class TimesheetEarning {
                     }
                     earningHoursWrapper newEarningHours = new earningHoursWrapper(); // ordinary
                     newEarningHours.id = timesheetDay.Id;
+                    newEarningHours.Name = timesheetDay.Name;
                     newEarningHours.day = timesheetDay.Day__c;
                     newEarningHours.hours = timesheetDay.Hours__c;
                     earningHours.add(newEarningHours);
@@ -53,15 +55,24 @@ public with sharing class TimesheetEarning {
     }
 
     public class earningsWrapper {
+        @AuraEnabled
         public String id;
+        @AuraEnabled
         public String earningType;
+        @AuraEnabled
         public Integer weekNumber;
+        @AuraEnabled
         public List<earningHoursWrapper> hours;
     }
 
     public class earningHoursWrapper {
+        @AuraEnabled
         public String id;
+        @AuraEnabled
+        public String Name;
+        @AuraEnabled
         public String day;
+        @AuraEnabled
         public Decimal hours;
     }
 }

@@ -8,13 +8,12 @@ export default class TimeSheetCmp extends LightningElement {
     activeWeekNumber;
     openModal = false;
 
-    @wire(getTimesheetDays, { timesheetId: '$timesheetId' })
+    @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber' })
     timesheetDays;
     
     handleClickSubmit(event){
         this.template.querySelector('c-heading-cmp').handleStatus(event.target.value);
         this.openModal = true;
-        console.log('Week Number: ' + this.activeWeekNumber);
         console.log('Day data: ' + JSON.stringify(this.timesheetDays));
     }
 
