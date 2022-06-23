@@ -6,13 +6,28 @@ export default class Earning extends LightningElement {
     earningType;
     
     renderedCallback() {
+        var total = 0;
         if(this.earning) {
             this.template.querySelector(`[data-id="earning-type"]`).value = this.earning.earningType;
-            var total = 0;
             for(let i = 0; i < 7; i++) {
                 this.template.querySelector(`[data-id="${i}"]`).value = this.earning.hours[i];
                 total += this.earning.hours[i];
             }
+            // this.template.querySelector(`[data-id="earning-type"]`).value = this.earning.earningType;
+            // for(let i = 0; i < 7; i++) {
+            //     if(this.earning.hours) {
+            //         for(let j = 0; j < this.earning.hours.length; j++) {
+            //             if(this.earning.hours[j].day === i.toString()) {
+            //                 this.template.querySelector(`[data-id="${i}"]`).value = this.earning.hours[j].hours;
+            //                 total += this.earning.hours[i];
+            //             } else {
+            //                 this.template.querySelector(`[data-id="${i}"]`).value = 0;
+            //             }
+            //         }
+            //     } else {
+            //         this.template.querySelector(`[data-id="${i}"]`).value = 0;
+            //     }
+            // }
             
             this.template.querySelector(`[data-id="total-hours"]`).value = total;
         }
@@ -25,9 +40,9 @@ export default class Earning extends LightningElement {
         ];
     }
 
-    handleChange(event) {
-        const id = event.currentTarget.id;
-        const value = event.target.value;
+    handleChange() {
+        // const id = event.currentTarget.id;
+        // const value = event.target.value;
         
         var newTotal = 0;
         for(let i = 0; i < 7; i++) {

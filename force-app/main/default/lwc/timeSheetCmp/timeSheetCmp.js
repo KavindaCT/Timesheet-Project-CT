@@ -4,33 +4,31 @@ import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheet
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
-    activeWeek;
+    activeWeek; // Only contains weekStart and weekEnding
     activeWeekNumber;
-    timesheetDays;
     openModal = false;
 
-    @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber'})
+    @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber' })
     timesheetDays;
     
     handleClickSubmit(event){
         this.template.querySelector('c-heading-cmp').handleStatus(event.target.value);
         this.openModal = true;
-        console.log('Data');
         console.log('Day data: ' + JSON.stringify(this.timesheetDays));
-    };
+    }
 
     changeWeek(event) {
         this.activeWeek = event.detail.week;
-        this.activeWeekNumber = event.detail.weekNumber;
+        this.activeWeekNumber = event.detail.weekNumber + 1;
     }
 
     cancelApprovers() {
         this.openModal = false;
     }
 
-    handleClickDraft(){};
+    handleClickDraft(){}
 
-    handleClickDelete(){};
+    handleClickDelete(){}
 
-    handleClickCancel(){};
+    handleClickCancel(){}
 }

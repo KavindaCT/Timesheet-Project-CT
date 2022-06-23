@@ -8,7 +8,7 @@ export default class Week extends LightningElement {
     daysOfWeek = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     @track earnings = [
-        { Id: 1, earningType: 'ordinary', hours: [0, 0, 0, 4, 5, 6, 7] },
+        { Id: 1, earningType: 'ordinary', hours: [0, 0, 0, 4, 5, 6, 7], weekNUmber: 0 }, // hours: [ { Id: '', day: '', hours: 0} ]
     ];
 
     set currentWeek(value) {
