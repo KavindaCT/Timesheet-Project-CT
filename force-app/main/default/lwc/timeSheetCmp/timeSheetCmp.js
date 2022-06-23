@@ -4,11 +4,11 @@ import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheet
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
-    activeWeek;
+    activeWeek; // Only contains weekStart and weekEnding
     activeWeekNumber;
     openModal = false;
 
-    @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber'})
+    @wire(getTimesheetDays, { timesheetId: '$timesheetId' })
     timesheetDays;
     
     handleClickSubmit(event){
