@@ -6,7 +6,6 @@ export default class TimeSheetCmp extends LightningElement {
     @api timesheetId;
     activeWeek;
     activeWeekNumber;
-    timesheetDays;
     openModal = false;
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber'})
@@ -15,22 +14,22 @@ export default class TimeSheetCmp extends LightningElement {
     handleClickSubmit(event){
         this.template.querySelector('c-heading-cmp').handleStatus(event.target.value);
         this.openModal = true;
-        console.log('Data');
+        console.log('Week Number: ' + this.activeWeekNumber);
         console.log('Day data: ' + JSON.stringify(this.timesheetDays));
-    };
+    }
 
     changeWeek(event) {
         this.activeWeek = event.detail.week;
-        this.activeWeekNumber = event.detail.weekNumber;
+        this.activeWeekNumber = event.detail.weekNumber + 1;
     }
 
     cancelApprovers() {
         this.openModal = false;
     }
 
-    handleClickDraft(){};
+    handleClickDraft(){}
 
-    handleClickDelete(){};
+    handleClickDelete(){}
 
-    handleClickCancel(){};
+    handleClickCancel(){}
 }
