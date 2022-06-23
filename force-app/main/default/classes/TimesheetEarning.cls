@@ -3,6 +3,7 @@ public with sharing class TimesheetEarning {
     public static List<earningsWrapper> getEarnings(List<Timesheet_Day__c> timesheetDays) {
         List<earningsWrapper> earnings = new List<earningsWrapper>();
         List<String> earningTypes = new List<String>();
+        Integer index = 0;
 
         /*  TimesheetDays
             [
@@ -13,41 +14,47 @@ public with sharing class TimesheetEarning {
             ]
         */
 
-        for(Timesheet_Day__c timesheetDay: timesheetDays) { // ['ordinary','overtime']
-            if(earningTypes.size() > 0) {
-                if(!earningTypes.contains(timesheetDay.Earning_Type__c)) {
+        if (timesheetDays.size() > 0) {
+            for(Timesheet_Day__c timesheetDay: timesheetDays) { // ['ordinary','overtime']
+                if(earningTypes.size() > 0) {
+                    if(!earningTypes.contains(timesheetDay.Earning_Type__c)) {
+                        earningTypes.add(timesheetDay.Earning_Type__c);
+                    }
+                } else {
                     earningTypes.add(timesheetDay.Earning_Type__c);
                 }
-            } else {
-                earningTypes.add(timesheetDay.Earning_Type__c);
             }
-        }
 
-        Integer index = 0;
+            for (String earningType : earningTypes) { // ordinary, id 0
+                earningsWrapper newEarning = new earningsWrapper();
+                List<earningHoursWrapper> earningHours = new List<earningHoursWrapper>();
 
-        for (String earningType : earningTypes) { // ordinary, id 0
-            earningsWrapper newEarning = new earningsWrapper();
-            List<earningHoursWrapper> earningHours = new List<earningHoursWrapper>();
+                newEarning.id = String.valueOf(index);
+                newEarning.earningType = earningType;
 
-            newEarning.id = String.valueOf(index);
-            newEarning.earningType = earningType;
-
-            for(Timesheet_Day__c timesheetDay: timesheetDays) {
-                if (timesheetDay.Earning_Type__c == earningType) {
-                    if(newEarning.weekNumber == null) {
-                        newEarning.weekNumber = Integer.valueOf(timesheetDay.Week_Number__c);
+                for(Timesheet_Day__c timesheetDay: timesheetDays) {
+                    if (timesheetDay.Earning_Type__c == earningType) {
+                        if(newEarning.weekNumber == null) {
+                            newEarning.weekNumber = Integer.valueOf(timesheetDay.Week_Number__c);
+                        }
+                        earningHoursWrapper newEarningHours = new earningHoursWrapper(); // ordinary
+                        newEarningHours.id = timesheetDay.Id;
+                        newEarningHours.Name = timesheetDay.Name;
+                        newEarningHours.day = timesheetDay.Day__c;
+                        newEarningHours.hours = timesheetDay.Hours__c;
+                        earningHours.add(newEarningHours);
                     }
-                    earningHoursWrapper newEarningHours = new earningHoursWrapper(); // ordinary
-                    newEarningHours.id = timesheetDay.Id;
-                    newEarningHours.Name = timesheetDay.Name;
-                    newEarningHours.day = timesheetDay.Day__c;
-                    newEarningHours.hours = timesheetDay.Hours__c;
-                    earningHours.add(newEarningHours);
                 }
-            }
-            newEarning.hours = earningHours;
+                newEarning.hours = earningHours;
 
-            index += 1;
+                index += 1;
+                earnings.add(newEarning);
+            }
+        } else {
+            earningsWrapper newEarning = new earningsWrapper();
+            newEarning.id = String.valueOf(index);
+            newEarning.earningType = '';
+            newEarning.hours = new List<earningHoursWrapper>();
             earnings.add(newEarning);
         }
 
