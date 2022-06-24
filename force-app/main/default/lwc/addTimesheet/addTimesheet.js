@@ -17,6 +17,7 @@ const MONTH = [
 ];
 
 export default class AddTimesheet extends NavigationMixin(LightningElement) {
+  showSpinner = false;
   timeSheetId;
   timePeriod;
 
@@ -35,6 +36,8 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
   }
 
   createNewTimesheet(timePeriod) {
+    this.showSpinner = true;
+  
     const fields = {};
     fields[TIMESHEET_NAME_FIELD.fieldApiName] = timePeriod;
     fields[TIMESHEET_STATUS_FIELD.fieldApiName] = 'draft';
@@ -42,8 +45,10 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
     createRecord(recordInput)
       .then(timesheet => {
         this.timeSheetId = timesheet.id;
+        this.showSpinner = false;
       })
       .catch(error => {
+        this.showSpinner = false;
         this.dispatchEvent(
           new ShowToastEvent({
             title: 'Error creating record',
@@ -55,6 +60,7 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
   }
 
   handlePeriodSelect(event) {
+    this.showSpinner = true;
     const currentTimePeriod = event.detail.value; // June 2022 - String
     getRecentTimesheet({ timePeriod: currentTimePeriod }).then(result => {
       if(result.length > 0) {
@@ -65,6 +71,7 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
         const payload = { timesheetId: this.timeSheetId, timesheetName: currentTimePeriod };
         publish(this.messageContext, TimesheetMessageChannel, payload);
       }
+      this.showSpinner = false;
     }).catch(error => {
       console.log(error);
     });

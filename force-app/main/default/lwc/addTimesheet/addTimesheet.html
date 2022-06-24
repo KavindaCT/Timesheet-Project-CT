@@ -12,5 +12,10 @@
                 </lightning-button>
             </div>
         </div>
+        <template if:true={showSpinner}>
+            <div class="exampleHolder">
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </div>
+        </template>
     </lightning-card>
 </template>
