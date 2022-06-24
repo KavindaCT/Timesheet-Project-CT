@@ -2,14 +2,14 @@ import { api, LightningElement, track } from 'lwc';
 
 export default class Week extends LightningElement {
     week;
-
+    earnings;
     tempEarningId = 1;
     weekDays = [];
     daysOfWeek = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    @track earnings = [
-        { Id: 1, earningType: 'ordinary', hours: [0, 0, 0, 4, 5, 6, 7], weekNUmber: 0 }, // hours: [ { Id: '', day: '', hours: 0} ]
-    ];
+    // @track earnings = [
+    //     { Id: 1, earningType: 'ordinary', hours: [0, 0, 0, 0, 0, 0, 0], weekNUmber: 0 }, // hours: [ { Id: '', day: '', hours: 0} ]
+    // ];
 
     set currentWeek(value) {
         this.week = value;
@@ -54,6 +54,15 @@ export default class Week extends LightningElement {
     @api
     get currentWeek() {
         return this.week;
+    }
+
+    set earningData(value) {
+        this.earnings = value;
+    }
+
+    @api
+    get earningData() {
+        return this.earnings;
     }
 
     addNewEarning() {

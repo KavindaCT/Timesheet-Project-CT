@@ -8,7 +8,7 @@
                 <c-heading-cmp time-period={timePeriod} onchangeweek={changeWeek}></c-heading-cmp>
             </lightning-layout-item>
             <lightning-layout-item size="12" if:true={activeWeek} class="">
-                <c-week current-week={activeWeek}></c-week>
+                <c-week current-week={activeWeek} earning-data={timesheetDays}></c-week>
             </lightning-layout-item>
         </lightning-layout>
 
