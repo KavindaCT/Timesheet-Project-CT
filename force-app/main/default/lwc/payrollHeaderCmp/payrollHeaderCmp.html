@@ -8,11 +8,14 @@
             <p>Earnings YTD</p>
             <button type="submit" class="slds-button slds-button_stretch viewbutton" onclick={viewEarnings}>View</button>
         </lightning-layout-item>
-        <lightning-layout-item class="slds-box" size="6">
+        <lightning-layout-item size="4" class="slds-box"></lightning-layout-item>
+        <lightning-layout-item class="slds-box" size="2">
+            <p>Timesheet Due Date</p>
+            <div class="slds-text-heading_large date">{dueDate}</div>
         </lightning-layout-item>
         <lightning-layout-item class="slds-box" size="2">
             <p>Next Payment Date</p>
-            <div class="slds-text-heading_large date">12 Jun</div>
+            <div class="slds-text-heading_large date">{paymentDate}</div>
         </lightning-layout-item>
     </lightning-layout>
 </template>
