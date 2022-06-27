@@ -38,4 +38,15 @@ public with sharing class TimesheetDataService {
             return null;
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static List<User> getAllApprovers(){
+        try {
+            return [
+                SELECT Id, Name FROM User
+            ];
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }
