@@ -6,7 +6,6 @@ export default class PayrollHeaderCmp extends LightningElement {
 
     connectedCallback(){
         const currentDate = new Date();
-        console.log(currentDate);
         this.paymentDate = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 5)).toDateString().substring(4);
         var lastDate = (new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0));
         if(lastDate.getDay() <6 && lastDate.getDay() > 0){

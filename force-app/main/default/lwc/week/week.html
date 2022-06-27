@@ -1,6 +1,6 @@
 <template>
-    
-        <lightning-layout multiple-rows class="slds-var-p-around_small slds-box">
+    <lightning-layout multiple-rows class="slds-var-p-around_small slds-box">
+        <template if:true={earnings}>
             <lightning-layout-item size="12">
                 <lightning-layout>
                     <lightning-layout-item size="3">
@@ -16,7 +16,7 @@
             </lightning-layout-item>
             <!-- BEGIN::Earnings -->
             <lightning-layout-item size="12" for:each={earnings} for:item="earning" key={earning.Id}>
-                <c-earning earning={earning} week-days={weekDays} onremove={removeEarning}></c-earning>
+                <c-earning earning-data={earning} week-days={weekDays} onremove={removeEarning}></c-earning>
             </lightning-layout-item>
             <!-- BEGIN::Earnings -->
             <!-- BEGIN::Add another row button -->
@@ -24,6 +24,11 @@
                 <lightning-button label="+ Add another line" onclick={addNewEarning}></lightning-button>
             </lightning-layout-item>
             <!-- END::Add another row button -->
-        </lightning-layout>
-   
+        </template>
+        <template if:false={earnings}>
+            <lightning-layout-item size="12" style="position:relative">
+                <lightning-spinner alternative-text="Loading" size="small" variant="brand"></lightning-spinner>
+            </lightning-layout-item>
+        </template>
+    </lightning-layout>
 </template>
