@@ -1,42 +1,51 @@
 import { LightningElement, api } from 'lwc';
 
 export default class Earning extends LightningElement {
-    @api earning;
+    earning;
     @api weekDays;
     earningType;
     
     renderedCallback() {
         var total = 0;
         if(this.earning) {
+            console.log('data: ' + JSON.stringify(this.earning));
             this.template.querySelector(`[data-id="earning-type"]`).value = this.earning.earningType;
+            /*
             for(let i = 0; i < 7; i++) {
                 this.template.querySelector(`[data-id="${i}"]`).value = this.earning.hours[i];
                 total += this.earning.hours[i];
+            }*/
+            for(let i = 0; i < 7; i++) {
+                if(this.earning.hours.length) { // jan 1 - 4, jan 2 - 5
+                    for(let j = 0; j < this.earning.hours.length; j++) {
+                        if(this.earning.hours[j].day.charAt(0) === i.toString()) {
+                            this.template.querySelector(`[data-id="${i}"]`).value = this.earning.hours[j].hours;
+                            total += this.earning.hours[i];
+                        } else {
+                            this.template.querySelector(`[data-id="${i}"]`).value = 0;
+                        }
+                    }
+                } else {
+                    this.template.querySelector(`[data-id="${i}"]`).value = 0;
+                }
             }
-            // this.template.querySelector(`[data-id="earning-type"]`).value = this.earning.earningType;
-            // for(let i = 0; i < 7; i++) {
-            //     if(this.earning.hours) {
-            //         for(let j = 0; j < this.earning.hours.length; j++) {
-            //             if(this.earning.hours[j].day === i.toString()) {
-            //                 this.template.querySelector(`[data-id="${i}"]`).value = this.earning.hours[j].hours;
-            //                 total += this.earning.hours[i];
-            //             } else {
-            //                 this.template.querySelector(`[data-id="${i}"]`).value = 0;
-            //             }
-            //         }
-            //     } else {
-            //         this.template.querySelector(`[data-id="${i}"]`).value = 0;
-            //     }
-            // }
-            
             this.template.querySelector(`[data-id="total-hours"]`).value = total;
         }
     }
 
+    set earningData(value) {
+        this.earning = value;
+    }
+
+    @api
+    get earningData() {
+        return this.earning;
+    }
+
     get earningTypes() {
         return [
-            { label: 'Ordinary Hours', value: 'ordinary' },
-            { label: 'Overtime Hours', value: 'ot' }
+            { label: 'Ordinary Hours', value: 'Ordinary Hours' },
+            { label: 'Overtime Hours', value: 'Overtime Hours' }
         ];
     }
 
