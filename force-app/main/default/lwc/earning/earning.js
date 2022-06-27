@@ -16,11 +16,11 @@ export default class Earning extends LightningElement {
                 total += this.earning.hours[i];
             }*/
             for(let i = 0; i < 7; i++) {
-                if(this.earning.hours.length) { // jan 1 - 4, jan 2 - 5
+                if(this.earning.hours.length) {
                     for(let j = 0; j < this.earning.hours.length; j++) {
                         if(this.earning.hours[j].day.charAt(0) === i.toString()) {
                             this.template.querySelector(`[data-id="${i}"]`).value = this.earning.hours[j].hours;
-                            total += this.earning.hours[i];
+                            total += this.earning.hours[j].hours;
                         } else {
                             this.template.querySelector(`[data-id="${i}"]`).value = 0;
                         }
