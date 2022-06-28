@@ -64,7 +64,6 @@ export default class TimeSheetCmp extends LightningElement {
         //     this.errorMessage=error;
         //     console.log('unable to update the record due to'+JSON.stringify(this.errorMessage));
         // });
-        console.log('Day data: ' + JSON.stringify(this.timesheetDays));
     }
 
     changeWeek(event) {

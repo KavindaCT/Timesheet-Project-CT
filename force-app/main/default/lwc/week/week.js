@@ -67,11 +67,11 @@ export default class Week extends LightningElement {
 
     addNewEarning() {
         this.tempEarningId += 1;
-        this.earnings.push({
+        this.earnings = [ ...this.earnings, {
             Id: this.tempEarningId,
             earningType: '',
             hours: []
-        });
+        }];
     }
 
     removeEarning(event) {
