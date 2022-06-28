@@ -1,7 +1,8 @@
 import { LightningElement, api, wire } from 'lwc';
 import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheetDays';
-import STATUS from '@salesforce/schema/Timesheet__c.Status__c';
+// import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import getAllApprovers from '@salesforce/apex/TimesheetDataService.getAllApprovers';
 
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
@@ -11,6 +12,7 @@ export default class TimeSheetCmp extends LightningElement {
     openModal = false;
     currentRecordId;
     timesheetDays;
+    availableApprovers = [];
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber' })
     wiredTimesheetDays({ error, data }) {
@@ -20,6 +22,27 @@ export default class TimeSheetCmp extends LightningElement {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Error while getting records',
+                    message: error.body.message,
+                    variant: 'error',
+                }),
+            );
+        }
+    }
+
+    @wire(getAllApprovers)
+    wiredApprovers({ error, data }) {
+        if (data) {
+            console.log(JSON.stringify(data));
+            this.availableApprovers = data.map(approver => {
+                return {
+                    label: approver.Name,
+                    value: approver.Id
+                }
+            });
+        } else if (error) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error while getting approvers',
                     message: error.body.message,
                     variant: 'error',
                 }),
@@ -41,7 +64,6 @@ export default class TimeSheetCmp extends LightningElement {
         //     this.errorMessage=error;
         //     console.log('unable to update the record due to'+JSON.stringify(this.errorMessage));
         // });
-        console.log('Day data: ' + JSON.stringify(this.timesheetDays));
     }
 
     changeWeek(event) {

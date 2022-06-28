@@ -32,3 +32,6 @@ h1{
     --slds-c-button-brand-color-background-hover: rgb(18, 104, 44);
     --slds-c-button-brand-color-border-hover: rgb(18, 104, 44);
 }
+.slds-modal__content{
+    overflow: initial;
+}

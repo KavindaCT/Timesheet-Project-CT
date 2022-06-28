@@ -20,6 +20,10 @@ export default class HeadingCmp extends LightningElement {
             var weekStart = new Date(firstDate);
             var weekEnd = new Date(firstDate);
 
+            /*
+            *
+            * Here weekstart from Sunday week end is Saturday *
+            *
             for (let i = 1; i < lastDate.getDate();) {
                 if ((weekStart.getDate() + (6 - weekStart.getDay())) < lastDate.getDate()) {
                     weekEnd.setDate(weekStart.getDate() + (6 - weekStart.getDay()));
@@ -38,6 +42,30 @@ export default class HeadingCmp extends LightningElement {
                 i = weekEnd.getDate();
                 weekNumber += 1;
             }
+            *
+            *
+            */
+
+            // [BEGIN] - Weekstart from Monday weekend is Friday
+            for (let i = 1; i < lastDate.getDate();) {
+                if ((weekStart.getDate() + (5 - weekStart.getDay())) < lastDate.getDate()) {
+                    weekEnd.setDate(weekStart.getDate() + (5 - weekStart.getDay()));
+                } else {
+                    weekEnd.setDate(lastDate.getDate());
+                }
+
+                // [{ weekEnding: '', weekStart: '', weekNumber: 0 }]
+                this.weeks.push({
+                    weekNumber: weekNumber,
+                    weekStart: weekStart.toDateString(),
+                    weekEnding: weekEnd.toDateString()
+                });
+                weekStart.setDate(weekEnd.getDate() + 3);
+
+                i = weekEnd.getDate();
+                weekNumber += 1;
+            }
+            // [END] - Weekstart from Monday weekend is Friday
             this.handleSetWeek(this.currentWeekNumber);
         }
     }
@@ -56,9 +84,9 @@ export default class HeadingCmp extends LightningElement {
 
             this.disablePreviousButton = false;
             this.disableNextButton = false;
-            
+
         }
-        if(this.currentWeekNumber === 0){
+        if (this.currentWeekNumber === 0) {
             this.disablePreviousButton = true;
         }
     }
@@ -71,7 +99,7 @@ export default class HeadingCmp extends LightningElement {
             this.disableNextButton = false;
             this.disablePreviousButton = false;
         }
-        if(this.currentWeekNumber === this.weeks.length-1){
+        if (this.currentWeekNumber === this.weeks.length - 1) {
             this.disableNextButton = true;
         }
     }
