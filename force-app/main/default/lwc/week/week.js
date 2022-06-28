@@ -5,7 +5,7 @@ export default class Week extends LightningElement {
     @track earnings;
     tempEarningId = 1;
     weekDays = [];
-    daysOfWeek = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     // @track earnings = [
     //     { Id: 1, earningType: 'ordinary', hours: [0, 0, 0, 0, 0, 0, 0], weekNUmber: 0 }, // hours: [ { Id: '', day: '', hours: 0} ]
@@ -18,6 +18,10 @@ export default class Week extends LightningElement {
         var weekEnding = new Date(this.currentWeek.weekEnding);
 
         // { dayId: 0, day: 'Mon', date: '01 May', disabled: boolean };
+        /*
+        *
+        * This code is for weekstart Sunday and weekend Saturday
+        *
         for(let i = 0; i < 7; i++) {
             var date = new Date(weekStart);
 
@@ -49,6 +53,49 @@ export default class Week extends LightningElement {
                 });
             }
         }
+        *
+        *
+        */
+        for (let i = 1; i < 7; i++) {
+            var date = new Date(weekStart);
+
+            if (i < weekStart.getDay()) {
+                date.setDate(weekStart.getDate() - (weekStart.getDay() - i));
+                this.weekDays.push({
+                    dayId: i,
+                    date: date.toDateString().substring(4, 10),
+                    day: this.daysOfWeek[i],
+                    disabled: true
+                });
+            } else if (weekStart.getDay() <= i && i <= weekEnding.getDay()) { // 3 <= 6 && 6 <= 5
+                date.setDate(weekStart.getDate() + (i - weekStart.getDay()));
+
+                this.weekDays.push({
+                    dayId: i,
+                    date: date.toDateString().substring(4, 10),
+                    day: this.daysOfWeek[i],
+                    disabled: false
+                });
+            } else {
+                date.setDate(weekEnding.getDate() + (i - weekEnding.getDay())); // 3 + 1
+
+                this.weekDays.push({
+                    dayId: i,
+                    date: date.toDateString().substring(4, 10),
+                    day: this.daysOfWeek[i],
+                    disabled: true
+                });
+            }
+        }
+        let sunday = new Date(weekEnding);
+        sunday.setDate(weekEnding.getDate() + (7 - weekEnding.getDay()))
+        this.weekDays.push({
+            dayId: 7,
+            date: sunday.toDateString().substring(4, 10),
+            day: this.daysOfWeek[0],
+            disabled: true
+        });
+
     }
 
     @api
@@ -67,7 +114,7 @@ export default class Week extends LightningElement {
 
     addNewEarning() {
         this.tempEarningId += 1;
-        this.earnings = [ ...this.earnings, {
+        this.earnings = [...this.earnings, {
             Id: this.tempEarningId,
             earningType: '',
             hours: []
