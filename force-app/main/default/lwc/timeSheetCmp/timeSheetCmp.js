@@ -3,10 +3,13 @@ import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheet
 // import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getAllApprovers from '@salesforce/apex/TimesheetDataService.getAllApprovers';
+import saveApproverName from '@salesforce/apex/SubmitTimesheetforApproval.saveApproverName';
 
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
+    approverName
+    approverRecord
     activeWeek; // Only contains weekStart and weekEnding
     activeWeekNumber;
     openModal = false;
@@ -76,6 +79,32 @@ export default class TimeSheetCmp extends LightningElement {
         this.openModal = false;
     }
 
+   saveApprovers(event) {
+        // console.log(this.availableApprovers);
+        let details=event.target.value;
+        for(let i = 0;i<this.availableApprovers.length;i++){
+            if(this.availableApprovers[i].value == details){
+                 this.approverName = this.availableApprovers[i].label
+                 console.log(this.approverName);
+                 
+            }
+        }
+        // console.log(JSON.stringify(details));
+    }
+
+    @wire(saveApproverName,{name:'$approverName'})
+    wiredApproverNames({ error, data }) {
+        if (data) {
+            // console.log(JSON.stringify(data));
+            this.approverRecord = data;
+
+            this.error = undefined;
+        } else if (error) {
+            this.error = error;
+
+            this.approverRecord = undefined;
+        }
+    }
     handleClickDraft() { }
 
     handleClickDelete() { }
