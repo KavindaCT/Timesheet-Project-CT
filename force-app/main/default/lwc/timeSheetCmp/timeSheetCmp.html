@@ -41,13 +41,13 @@
                     <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Submit Timesheet</h2>
                 </div>
                 <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
-                    <lightning-combobox name="Approvers" label="Select Approvers" value={approver}
-                        options={availableApprovers}></lightning-combobox>
+                    <lightning-combobox name="Approvers" label="Select Approvers" options={availableApprovers}
+                        value={approverId} onchange={handleChangeApprover}></lightning-combobox>
                 </div>
                 <div class="slds-modal__footer">
                     <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
                         onclick={cancelApprovers}>Cancel</button>
-                    <button class="slds-button slds-button_brand">Save</button>
+                    <button class="slds-button slds-button_brand" onclick={sendToApprove}>Submit</button>
                 </div>
             </div>
         </section>
