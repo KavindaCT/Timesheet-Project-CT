@@ -1,8 +1,12 @@
 import { LightningElement, api, wire } from 'lwc';
-import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheetDays';
-// import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheetDays';
 import getAllApprovers from '@salesforce/apex/TimesheetDataService.getAllApprovers';
+import submitForApproval from '@salesforce/apex/SubmitTimesheetforApproval.submitForApproval';
+
+// import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
+import uId from '@salesforce/user/Id';
 
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
@@ -13,6 +17,8 @@ export default class TimeSheetCmp extends LightningElement {
     currentRecordId;
     timesheetDays;
     availableApprovers = [];
+    currentUserId = uId;
+    approverId;
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber' })
     wiredTimesheetDays({ error, data }) {
@@ -32,7 +38,6 @@ export default class TimeSheetCmp extends LightningElement {
     @wire(getAllApprovers)
     wiredApprovers({ error, data }) {
         if (data) {
-            console.log(JSON.stringify(data));
             this.availableApprovers = data.map(approver => {
                 return {
                     label: approver.Name,
@@ -48,6 +53,10 @@ export default class TimeSheetCmp extends LightningElement {
                 }),
             );
         }
+    }
+
+    handleChangeApprover(event) {
+        this.approverId = event.target.value;
     }
 
     handleClickSubmit(event) {
@@ -74,6 +83,25 @@ export default class TimeSheetCmp extends LightningElement {
 
     cancelApprovers() {
         this.openModal = false;
+    }
+
+    sendToApprove() {
+        if (this.approverId) {
+            submitForApproval({ timesheetId: this.timesheetId, approverId: this.approverId })
+                .then(result => {
+                    console.log(result);
+                    this.openModal = false;
+                }).catch(error => {
+                    console.log(error);
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Send to approval Failed - Please contact Administrator',
+                            message: error.message,
+                            variant: 'error'
+                        })
+                    );
+                });
+        }
     }
 
     handleClickDraft() { }
