@@ -57,4 +57,9 @@ public class SubmitTimesheetforApproval {
             Approval.ProcessResult result =  Approval.process(req);
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static void saveApproverName(String name) {
+       System.debug(name);
+    }
  }
