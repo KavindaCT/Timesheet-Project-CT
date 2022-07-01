@@ -1,9 +1,10 @@
 import { LightningElement, api } from 'lwc';
-
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 export default class Earning extends LightningElement {
     earning;
     @api weekDays;
     earningType;
+    error = false;
     
     renderedCallback() {
         var total = 0;
@@ -43,21 +44,42 @@ export default class Earning extends LightningElement {
 
     get earningTypes() {
         return [
-            { label: 'Ordinary Hours', value: 'Ordinary Hours' },
-            { label: 'Overtime Hours', value: 'Overtime Hours' }
+            { label: 'Ordinary Hours', value: 'Ordinary Hours' }
         ];
     }
 
-    handleChange() {
-        // const id = event.currentTarget.id;
-        // const value = event.target.value;
+    get getErrorClass() {
+        return this.error? 'slds-box': '';
+    }
+    get getTotalHoursClass() {
+        return this.error? 'slds-text-color_error' : 'slds-text-color_default';
+    }
+
+    handleChange(event) {
+        // const id = event.currentTarget.dataset.id;
+        const value = event.target.value;
         
         var newTotal = 0;
-        for(let i = 0; i < 7; i++) {
-            newTotal += parseFloat(this.template.querySelector(`[data-id="${i}"]`).value);
+        for(let i = 1; i < 6; i++) {
+            if(!this.weekDays[i - 1].disabled) {
+                newTotal += parseFloat(this.template.querySelector(`[data-id="${i}"]`).value);
+            }
         }
 
-        this.template.querySelector(`[data-id="total-hours"]`).value = newTotal;
+        if(value > 9) {
+            this.error = true;
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Daily Working Hours limit exceeded',
+                    message: 'Please review your working hours',
+                    variant: 'error',
+                }),
+            );
+        } else {
+            this.error = false;
+        }
+
+        this.template.querySelector('[data-id="total-hours"]').value = newTotal;
     }
 
     @api sendEarning() {
