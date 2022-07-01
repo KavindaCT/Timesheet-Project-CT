@@ -48,10 +48,26 @@ export default class HeadingCmp extends LightningElement {
 
             // [BEGIN] - Weekstart from Monday weekend is Friday
             for (let i = 1; i < lastDate.getDate();) {
-                if ((weekStart.getDate() + (5 - weekStart.getDay())) < lastDate.getDate()) {
+                if(i === 1 && weekStart.getDay() === 6) { 
+                    weekStart.setDate(firstDate.getDate() + 2); // If month start with saturday
+                } else if(i === 1 && weekStart.getDay() === 0) {
+                    weekStart.setDate(firstDate.getDate() + 1); // If month starts with sunday
+                }
+
+                if ((weekStart.getDate() + (7 - weekStart.getDay())) < lastDate.getDate()) {
                     weekEnd.setDate(weekStart.getDate() + (5 - weekStart.getDay()));
+
+                    i = weekEnd.getDate();
                 } else {
-                    weekEnd.setDate(lastDate.getDate());
+                    if(lastDate.getDay() === 0) {
+                        weekEnd.setDate(lastDate.getDate() - 2); // If month ending is Sunday
+                    } else if(lastDate.getDay() === 6) {
+                        weekEnd.setDate(lastDate.getDate() - 1); // If month ending is saturday
+                    } else {
+                        weekEnd.setDate(lastDate.getDate()); // If month ending is weekday
+                    }
+
+                    i = lastDate.getDate(); // exit loop when reach to final day of the month
                 }
 
                 // [{ weekEnding: '', weekStart: '', weekNumber: 0 }]
@@ -60,9 +76,8 @@ export default class HeadingCmp extends LightningElement {
                     weekStart: weekStart.toDateString(),
                     weekEnding: weekEnd.toDateString()
                 });
-                weekStart.setDate(weekEnd.getDate() + 3);
 
-                i = weekEnd.getDate();
+                weekStart.setDate(weekEnd.getDate() + 3);
                 weekNumber += 1;
             }
             // [END] - Weekstart from Monday weekend is Friday
