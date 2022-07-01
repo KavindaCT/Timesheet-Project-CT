@@ -7,7 +7,10 @@ import {
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import TimesheetMessageChannel from '@salesforce/messageChannel/TimesheetMessageChannel__c';
 import getRecentTimesheet from '@salesforce/apex/TimesheetDataService.getRecentTimesheet';
-import { createRecord } from 'lightning/uiRecordApi';
+import { createRecord, getRecord } from 'lightning/uiRecordApi';
+
+import uId from '@salesforce/user/Id';
+import NAME_FIELD from '@salesforce/schema/User.Name';
 
 import TIMESHEET_OBJECT from '@salesforce/schema/Timesheet__c';
 import TIMESHEET_NAME_FIELD from '@salesforce/schema/Timesheet__c.Name';
@@ -18,12 +21,24 @@ const MONTH = [
 ];
 
 export default class AddTimesheet extends NavigationMixin(LightningElement) {
-  showSpinner = false;
+  showSpinner = true;
   timeSheetId;
   timePeriod;
+  currentUserId = uId;
+  currentUserName;
 
   @wire(MessageContext)
   messageContext;
+
+  @wire(getRecord, { recordId: '$currentUserId', fields: [NAME_FIELD] })
+  wiredUser({ error, data }) {
+    if(data) {
+      this.currentUserName = data.fields.Name.value;
+      this.showSpinner = false;
+    } else if(error) {
+      console.log(error);
+    }
+  }
 
   connectedCallback() {
     const currentDate = new Date();
@@ -62,8 +77,8 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
 
   handlePeriodSelect(event) {
     this.showSpinner = true;
-    const currentTimePeriod = event.detail.value; // June 2022 - String
-    getRecentTimesheet({ timePeriod: currentTimePeriod }).then(result => {
+    const currentTimePeriod = event.detail.value + ' - ' + this.currentUserName; // 'June 2022 - Employee Name' String
+    getRecentTimesheet({ timePeriod: currentTimePeriod, currentUser: this.currentUserId }).then(result => {
       if(result.length > 0) {
         const payload = { timesheetId: result[0].Id, timesheetName: result[0].Name };
         publish(this.messageContext, TimesheetMessageChannel, payload);

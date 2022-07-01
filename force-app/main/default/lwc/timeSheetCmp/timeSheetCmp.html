@@ -50,6 +50,11 @@
                     <button class="slds-button slds-button_brand" onclick={sendToApprove}>Submit</button>
                 </div>
             </div>
+            <template if:true={isLoading}>
+                <div class="exampleHolder">
+                    <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+                </div>
+            </template>
         </section>
         <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
     </template>

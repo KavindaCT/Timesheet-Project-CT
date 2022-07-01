@@ -12,34 +12,9 @@
                 onchange={handleChange} disabled={day.disabled}>
             </lightning-input>
         </lightning-layout-item>
-        <!-- <lightning-layout-item size="1">
-            <lightning-input id="day_1" class="slds-var-m-right_small" type="number" step="0.1" value={day1} onchange={handleChange}>
-            </lightning-input>
-        </lightning-layout-item>
-        <lightning-layout-item size="1">
-            <lightning-input  id="day_2" class="slds-var-m-right_small" type="number" step="0.1" value={day2} onchange={handleChange}>
-            </lightning-input>
-        </lightning-layout-item>
-        <lightning-layout-item size="1">
-            <lightning-input id="day_3" class="slds-var-m-right_small" type="number" step="0.1" value={day3} onchange={handleChange}>
-            </lightning-input>
-        </lightning-layout-item>
-        <lightning-layout-item size="1">
-            <lightning-input id="day_4" class="slds-var-m-right_small" type="number" step="0.1" value={day4} onchange={handleChange}>
-            </lightning-input>
-        </lightning-layout-item>
-        <lightning-layout-item size="1">
-            <lightning-input id="day_5" class="slds-var-m-right_small" type="number" step="0.1" value={day5} onchange={handleChange}>
-            </lightning-input>
-        </lightning-layout-item>
-        <lightning-layout-item size="1">
-            <lightning-input id="day_6" class="slds-var-m-right_small" type="number" step="0.1" value={day6} onchange={handleChange}>
-            </lightning-input>
-        </lightning-layout-item> -->
-        <!-- END::Hour Inputs -->
         <lightning-layout-item size="1">
             <div class="slds-var-m-top_large">
-                <lightning-formatted-number data-id="total-hours" minimum-fraction-digits="2">
+                <lightning-formatted-number data-id="total-hours" class={getTotalHoursClass} minimum-fraction-digits="2">
                 </lightning-formatted-number>
             </div>
         </lightning-layout-item>

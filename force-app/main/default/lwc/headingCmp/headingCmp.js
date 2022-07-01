@@ -14,7 +14,7 @@ export default class HeadingCmp extends LightningElement {
 
     connectedCallback() {
         if (this.timePeriod) {
-            const firstDate = new Date('01 ' + this.timePeriod + ' 00:00');
+            const firstDate = new Date('01 ' + this.timePeriod.substring(0, 9) + ' 00:00');
             const lastDate = (new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0));
             var weekNumber = 0;
             var weekStart = new Date(firstDate);
