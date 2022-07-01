@@ -19,6 +19,7 @@ export default class TimeSheetCmp extends LightningElement {
     availableApprovers = [];
     currentUserId = uId;
     approverId;
+    isLoading = true;
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber' })
     wiredTimesheetDays({ error, data }) {
@@ -44,6 +45,7 @@ export default class TimeSheetCmp extends LightningElement {
                     value: approver.Id
                 }
             });
+            this.isLoading = false;
         } else if (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -52,6 +54,7 @@ export default class TimeSheetCmp extends LightningElement {
                     variant: 'error',
                 }),
             );
+            this.isLoading = false;
         }
     }
 
@@ -86,10 +89,19 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     sendToApprove() {
+        this.isLoading = true;
         if (this.approverId) {
             submitForApproval({ timesheetId: this.timesheetId, approverId: this.approverId })
                 .then(result => {
                     console.log(result);
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Success',
+                            message: 'Your request has sent to the Approver',
+                            variant: 'success'
+                        })
+                    );
+                    this.isLoading = false;
                     this.openModal = false;
                 }).catch(error => {
                     console.log(error);
@@ -100,6 +112,7 @@ export default class TimeSheetCmp extends LightningElement {
                             variant: 'error'
                         })
                     );
+                    this.isLoading = false;
                 });
         }
     }
