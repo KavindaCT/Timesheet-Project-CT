@@ -21,7 +21,7 @@ export default class TimeSheetCmp extends LightningElement {
     approverId;
     isLoading = true;
 
-    @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber' })
+    @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber', currentUser: '$currentUserId' })
     wiredTimesheetDays({ error, data }) {
         if (data) {
             this.timesheetDays = data;
