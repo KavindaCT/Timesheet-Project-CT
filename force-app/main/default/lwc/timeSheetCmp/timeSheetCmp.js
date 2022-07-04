@@ -16,15 +16,18 @@ export default class TimeSheetCmp extends LightningElement {
     openModal = false;
     currentRecordId;
     timesheetDays;
+    timesheetDaysPerWeek;
     availableApprovers = [];
     currentUserId = uId;
     approverId;
     isLoading = true;
 
-    @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber', currentUser: '$currentUserId' })
+    @wire(getTimesheetDays, { timesheetId: '$timesheetId', currentUser: '$currentUserId' })
     wiredTimesheetDays({ error, data }) {
         if (data) {
             this.timesheetDays = data;
+            this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === this.activeWeekNumber);
+            console.log(this.timesheetDaysPerWeek);
         } else if (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -79,8 +82,7 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     changeWeek(event) {
-        this.timesheetDays = null;
-        this.activeWeek = event.detail.week;
+        this.activeWeek = event.detail.week; // { Weekstart, Weekending }
         this.activeWeekNumber = event.detail.weekNumber + 1;
     }
 

@@ -9,7 +9,7 @@ export default class Earning extends LightningElement {
     renderedCallback() {
         var total = 0;
         if(this.earning) {
-            // console.log('data: ' + JSON.stringify(this.earning));
+            console.log('data: ' + JSON.stringify(this.earning));
             this.template.querySelector(`[data-id="earning-type"]`).value = this.earning.earningType;
             /*
             for(let i = 0; i < 7; i++) {

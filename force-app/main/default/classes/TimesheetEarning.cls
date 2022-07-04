@@ -23,32 +23,34 @@ public with sharing class TimesheetEarning {
                 } else {
                     earningTypes.add(timesheetDay.Earning_Type__c);
                 }
-            }
+            } // 1-5
 
             for (String earningType : earningTypes) { // ordinary, id 0
-                earningsWrapper newEarning = new earningsWrapper();
-                List<earningHoursWrapper> earningHours = new List<earningHoursWrapper>();
+                for(let i = 1; 1 < 6; i++) {
+                    earningsWrapper newEarning = new earningsWrapper();
+                    List<earningHoursWrapper> earningHours = new List<earningHoursWrapper>(); // earning record - every earning type & week number
 
-                newEarning.id = String.valueOf(index);
-                newEarning.earningType = earningType;
+                    newEarning.earningType = earningType;
 
-                for(Timesheet_Day__c timesheetDay: timesheetDays) {
-                    if (timesheetDay.Earning_Type__c == earningType) {
-                        if(newEarning.weekNumber == null) {
-                            newEarning.weekNumber = Integer.valueOf(timesheetDay.Week_Number__c);
+                    for(Timesheet_Day__c timesheetDay: timesheetDays) {
+                        if (timesheetDay.Earning_Type__c == earningType) {
+                            if(newEarning.weekNumber == null || newEarning.id == null) {
+                                newEarning.id = timesheetDay.Week_Number__c + String.valueOf(index); // weekNumber+index+ [2 - 0,1] => 00, 31
+                                newEarning.weekNumber = Integer.valueOf(timesheetDay.Week_Number__c);
+                            }
+                            earningHoursWrapper newEarningHours = new earningHoursWrapper(); // ordinary
+                            newEarningHours.id = timesheetDay.Id;
+                            newEarningHours.Name = timesheetDay.Name;
+                            newEarningHours.day = timesheetDay.Day__c;
+                            newEarningHours.hours = timesheetDay.Hours__c;
+                            earningHours.add(newEarningHours);
                         }
-                        earningHoursWrapper newEarningHours = new earningHoursWrapper(); // ordinary
-                        newEarningHours.id = timesheetDay.Id;
-                        newEarningHours.Name = timesheetDay.Name;
-                        newEarningHours.day = timesheetDay.Day__c;
-                        newEarningHours.hours = timesheetDay.Hours__c;
-                        earningHours.add(newEarningHours);
                     }
-                }
-                newEarning.hours = earningHours;
+                    newEarning.hours = earningHours;
 
-                index += 1;
-                earnings.add(newEarning);
+                    index += 1;
+                    earnings.add(newEarning);
+                }
             }
         } else {
             earningsWrapper newEarning = new earningsWrapper();
