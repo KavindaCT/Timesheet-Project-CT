@@ -16,6 +16,7 @@ public with sharing class TimesheetDataService {
 
     @AuraEnabled(cacheable=true)
     public static List<TimesheetEarning.earningsWrapper> getTimesheetDays(String timesheetId, String currentUser){
+        List<TimesheetEarning.earningsWrapper> earnings = new List<TimesheetEarning.earningsWrapper>();
         try {
             List<Timesheet_Day__c> timesheetDays =  [
                 SELECT Id, Name, Hours__c, Week_Number__c, Earning_Type__c, Day__c
@@ -30,12 +31,11 @@ public with sharing class TimesheetDataService {
                ]
             */
             
-            List<TimesheetEarning.earningsWrapper> earnings =  TimesheetEarning.getEarnings(timesheetDays);
-            return earnings;
+            earnings =  TimesheetEarning.getEarnings(timesheetDays);
         } catch (Exception e) {
             System.debug('Exception: ' + e.getMessage());
-            return null;
         }
+        return earnings;
     }
 
     @AuraEnabled(cacheable=true)
