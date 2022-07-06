@@ -66,7 +66,7 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleClickSubmit(event) {
-        this.template.querySelector('c-heading-cmp').handleStatus(event.target.value);
+        
         this.openModal = true;
         // this.currentRecordId='a008d000005UjhoAAC';
         // console.log('@@currentRecordId@@@'+this.currentRecordId);
@@ -105,6 +105,7 @@ export default class TimeSheetCmp extends LightningElement {
                     );
                     this.isLoading = false;
                     this.openModal = false;
+                    this.template.querySelector('c-heading-cmp').handleStatus();
                 }).catch(error => {
                     console.log(error);
                     this.dispatchEvent(
