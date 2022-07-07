@@ -84,6 +84,10 @@ export default class TimeSheetCmp extends LightningElement {
     changeWeek(event) {
         this.activeWeek = event.detail.week; // { Weekstart, Weekending }
         this.activeWeekNumber = event.detail.weekNumber + 1;
+        if(this.timesheetDays) {
+            this.timesheetDaysPerWeek = [];
+            this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === event.detail.weekNumber + 1);
+        }
     }
 
     cancelApprovers() {

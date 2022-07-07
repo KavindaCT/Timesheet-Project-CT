@@ -24,9 +24,13 @@ export default class Earning extends LightningElement {
                         total += earningHours.hours;
                     } else if(!this.weekDays[i - 1].disabled) {
                         this.template.querySelector(`[data-id="${i}"]`).value = 0;
+                    } else {
+                        this.template.querySelector(`[data-id="${i}"]`).value = null;
                     }
                 } else if(!this.weekDays[i - 1].disabled) {
                     this.template.querySelector(`[data-id="${i}"]`).value = 0;
+                } else {
+                    this.template.querySelector(`[data-id="${i}"]`).value = null;
                 }
             }
             this.template.querySelector(`[data-id="total-hours"]`).value = total;
