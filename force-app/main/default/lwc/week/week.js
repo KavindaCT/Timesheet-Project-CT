@@ -121,6 +121,10 @@ export default class Week extends LightningElement {
         }];
     }
 
+    changeValue(event) {
+        this.dispatchEvent(new CustomEvent('changevalue', { detail: event.detail }));
+    }
+
     removeEarning(event) {
         this.earnings = this.earnings.filter(earning => !(earning.Id === event.detail.Id));
     }

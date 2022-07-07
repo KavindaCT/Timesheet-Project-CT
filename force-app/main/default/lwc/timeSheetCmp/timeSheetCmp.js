@@ -1,4 +1,4 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheetDays';
@@ -15,7 +15,7 @@ export default class TimeSheetCmp extends LightningElement {
     activeWeekNumber;
     openModal = false;
     currentRecordId;
-    timesheetDays;
+    @track timesheetDays;
     timesheetDaysPerWeek;
     availableApprovers = [];
     currentUserId = uId;
@@ -27,7 +27,7 @@ export default class TimeSheetCmp extends LightningElement {
         if (data) {
             this.timesheetDays = data;
             this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === this.activeWeekNumber);
-            console.log(this.timesheetDaysPerWeek);
+            // console.log(this.timesheetDaysPerWeek);
         } else if (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -121,6 +121,23 @@ export default class TimeSheetCmp extends LightningElement {
                     this.isLoading = false;
                 });
         }
+    }
+
+    handleChangeValue(event) {
+        let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
+        // let earning = this.timesheetDays[index];
+
+        let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === event.detail.dayId);
+        let day = this.timesheetDays[index].hours[hoursindex];
+        // day.hours = 56;
+
+        // earning.hours.set(hoursindex, day);
+        console.log(JSON.stringify(day));
+        // this.timesheetDays.set(index, earning);
+
+        // newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
+
+        // console.log(this.newTimesheetDays);
     }
 
     handleClickDraft() { }
