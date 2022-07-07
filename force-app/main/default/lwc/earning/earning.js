@@ -21,7 +21,7 @@ export default class Earning extends LightningElement {
                     let earningHours = this.earning.hours.find(earning => earning.day.charAt(0) === i.toString());
                     if (earningHours) {
                         this.template.querySelector(`[data-id="${i}"]`).value = earningHours.hours;
-                        total += earningHours.hours;
+                        total += parseFloat(earningHours.hours);
                     } else if (!this.weekDays[i - 1].disabled) {
                         this.template.querySelector(`[data-id="${i}"]`).value = 0;
                     } else {
@@ -81,8 +81,14 @@ export default class Earning extends LightningElement {
             );
         } else if(value) {
             this.error = false;
-            let dayId = this.earning.hours.find(day => day.day.charAt(0) === id).id;
-            this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: dayId, value: value } }));
+            let relatedDay = this.earning.hours.find(day => day.day.charAt(0) === id);
+
+            if(relatedDay) {
+                let dayId = relatedDay.id;
+                this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: dayId, value: value } }));
+            } else {
+                this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: '', day: id, value: value } }));
+            }
         }
 
         this.template.querySelector('[data-id="total-hours"]').value = newTotal;

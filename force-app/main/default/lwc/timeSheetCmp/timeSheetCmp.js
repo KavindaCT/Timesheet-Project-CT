@@ -124,20 +124,23 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleChangeValue(event) {
+        var newTimesheetDays =JSON.parse(JSON.stringify(this.timesheetDays));
+        const dayId = event.detail.dayId;
+
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
-        // let earning = this.timesheetDays[index];
 
-        let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === event.detail.dayId);
-        let day = this.timesheetDays[index].hours[hoursindex];
-        // day.hours = 56;
+        if(dayId !== '') {
+            let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
+            newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
+        } else {
+            newTimesheetDays[index].hours.push({
+                name: event.detail.name + '-' + this.timePeriod.substring(0, 9) + '-' + newTimesheetDays[index].earningType,
+                hours: event.detail.value,
+                day: event.detail.day
+            });
+        }
 
-        // earning.hours.set(hoursindex, day);
-        console.log(JSON.stringify(day));
-        // this.timesheetDays.set(index, earning);
-
-        // newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
-
-        // console.log(this.newTimesheetDays);
+        this.timesheetDays = newTimesheetDays;
     }
 
     handleClickDraft() { }
