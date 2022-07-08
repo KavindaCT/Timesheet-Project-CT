@@ -48,4 +48,14 @@ public with sharing class TimesheetDataService {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    @AuraEnabled
+    public static void insertTimesheetDays(List<Map<String, String>> timesheetDays){
+        // [ { id: 10, earningType: 'ordinary', hours: [ { id: '', name: '', day: '', hours: 0} ], weekNUmber: 1 }, ]
+        try {
+            System.debug(timesheetDays);
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }

@@ -4,6 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheetDays';
 import getAllApprovers from '@salesforce/apex/TimesheetDataService.getAllApprovers';
 import submitForApproval from '@salesforce/apex/SubmitTimesheetforApproval.submitForApproval';
+import insertTimesheetDays from '@salesforce/apex/TimesheetDataService.insertTimesheetDays';
 
 // import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import uId from '@salesforce/user/Id';
@@ -143,7 +144,13 @@ export default class TimeSheetCmp extends LightningElement {
         this.timesheetDays = newTimesheetDays;
     }
 
-    handleClickDraft() { }
+    handleClickDraft() {
+        insertTimesheetDays({ timsheetDays: this.timesheetDays }).then(result => {
+            console.log(result);
+        }).catch(error => {
+            console.log(error);
+        });
+    }
 
     handleClickDelete() { }
 
