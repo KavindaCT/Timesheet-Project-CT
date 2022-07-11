@@ -65,16 +65,18 @@ export default class TimeSheetCmp extends LightningElement {
     @wire(getRoleSubordinateUsers)
     wiredApprovers({ error, data }) {
         if (data) {
-            for (let key in data) {
-                this.availableApprovers.push({value:data[key], key:key});
-             }
+            // for (let key in data) {
+            //     this.availableApprovers.push({label:data[key], value:key});
+            //  }
             // this.roleId = data;
-            console.log(JSON.stringify(this.availableApprovers[0].value.Name));
-                 
-                return {
-                    label: this.availableApprovers[0].value.Name,
-                    value:this.availableApprovers[0].value.Id
-                }
+            this.availableApprovers = data.map(approver => {
+                            return {
+                                label: approver.Name,
+                                value: approver.Id
+                            }
+                        });
+                        this.isLoading = false;
+                        console.log(JSON.stringify(this.availableApprovers));
             
             this.isLoading = false;
         } else if (error) {

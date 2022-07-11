@@ -2,7 +2,7 @@ public with sharing class RoleHierachy {
 
 
     @AuraEnabled(cacheable=true)  
-    public static Map<Id,User> getRoleSubordinateUsers() {
+    public static List<User> getRoleSubordinateUsers() {
       try{
         String roleId = System.userInfo.getUserRoleId();
 
@@ -10,7 +10,7 @@ public with sharing class RoleHierachy {
        List<Id> allSubRoleIds = getAllSubRoleIds(new List<ID>{roleId});
           
          // get all of the ids for the users in those roles
-         Map<Id,User> users = new Map<Id, User>([Select Id, Name From User where
+         List<User> users = new List<User>([Select Id, Name From User where
          UserRoleId IN :allSubRoleIds]);
          
          System.debug(roleId);
