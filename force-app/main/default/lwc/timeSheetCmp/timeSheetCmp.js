@@ -1,9 +1,11 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheetDays';
 import getAllApprovers from '@salesforce/apex/TimesheetDataService.getAllApprovers';
 import submitForApproval from '@salesforce/apex/SubmitTimesheetforApproval.submitForApproval';
+import getRoleSubordinateUsers from '@salesforce/apex/RoleHierachy.getRoleSubordinateUsers';
+import UsrRoleId from '@salesforce/schema/User.UserRoleId';
 
 // import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import uId from '@salesforce/user/Id';
@@ -16,9 +18,10 @@ export default class TimeSheetCmp extends LightningElement {
     openModal = false;
     currentRecordId;
     timesheetDays;
-    availableApprovers = [];
     currentUserId = uId;
     approverId;
+    availableApprovers =[];
+    roleId;
     isLoading = true;
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', weekNumber: '$activeWeekNumber', currentUser: '$currentUserId' })
@@ -36,15 +39,43 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
-    @wire(getAllApprovers)
+    // @wire(getAllApprovers)
+    // wiredApprovers({ error, data }) {
+    //     if (data) {
+    //         this.availableApprovers = data.map(approver => {
+    //             return {
+    //                 label: approver.Name,
+    //                 value: approver.Id
+    //             }
+    //         });
+    //         this.isLoading = false;
+    //         console.log(JSON.stringify(this.availableApprovers));
+    //     } else if (error) {
+    //         this.dispatchEvent(
+    //             new ShowToastEvent({
+    //                 title: 'Error while getting approvers',
+    //                 message: error.body.message,
+    //                 variant: 'error',
+    //             }),
+    //         );
+    //         this.isLoading = false;
+    //     }
+    // }
+
+    @wire(getRoleSubordinateUsers)
     wiredApprovers({ error, data }) {
         if (data) {
-            this.availableApprovers = data.map(approver => {
+            for (let key in data) {
+                this.availableApprovers.push({value:data[key], key:key});
+             }
+            // this.roleId = data;
+            console.log(JSON.stringify(this.availableApprovers[0].value.Name));
+                 
                 return {
-                    label: approver.Name,
-                    value: approver.Id
+                    label: this.availableApprovers[0].value.Name,
+                    value:this.availableApprovers[0].value.Id
                 }
-            });
+            
             this.isLoading = false;
         } else if (error) {
             this.dispatchEvent(
@@ -57,6 +88,7 @@ export default class TimeSheetCmp extends LightningElement {
             this.isLoading = false;
         }
     }
+    
 
     handleChangeApprover(event) {
         this.approverId = event.target.value;
@@ -65,6 +97,7 @@ export default class TimeSheetCmp extends LightningElement {
     handleClickSubmit(event) {
         this.template.querySelector('c-heading-cmp').handleStatus(event.target.value);
         this.openModal = true;
+        console.log(uRoleId);
         // this.currentRecordId='a008d000005UjhoAAC';
         // console.log('@@currentRecordId@@@'+this.currentRecordId);
         // updateToggle({cliId: this.currentRecordId})
