@@ -7,10 +7,11 @@ import submitForApproval from '@salesforce/apex/SubmitTimesheetforApproval.submi
 import getRoleSubordinateUsers from '@salesforce/apex/RoleHierachy.getRoleSubordinateUsers';
 import UsrRoleId from '@salesforce/schema/User.UserRoleId';
 import insertTimesheetDays from '@salesforce/apex/TimesheetDataService.insertTimesheetDays';
-
-// import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
+import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import uId from '@salesforce/user/Id';
+import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 
+const fields =[STATUS_FIELD];
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
@@ -26,6 +27,26 @@ export default class TimeSheetCmp extends LightningElement {
     availableApprovers =[];
     roleId;
     isLoading = true;
+    readOnly = false;
+    alertdata;
+
+    @wire(getRecord, { recordId: '$timesheetId', fields })
+    account({error, data}){
+        if(data){
+          this.alertdata = data;
+          if(this.alertdata.fields.Status__c.value =='Submitted' || this.alertdata.fields.Status__c.value =='Approved' ){
+            this.readOnly = true;
+        }else{
+            this.readOnly = false;
+        }
+          console.log(JSON.stringify(this.alertdata.fields.Status__c.value));
+        }else if(error){
+          console.log(JSON.stringify(error)); 
+        }
+      };
+
+   
+
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', currentUser: '$currentUserId' })
     wiredTimesheetDays({ error, data }) {
@@ -81,7 +102,7 @@ export default class TimeSheetCmp extends LightningElement {
                             }
                         });
                         this.isLoading = false;
-                        console.log(JSON.stringify(this.availableApprovers));
+                        // console.log(JSON.stringify(this.availableApprovers));
             
             this.isLoading = false;
         } else if (error) {
@@ -103,7 +124,8 @@ export default class TimeSheetCmp extends LightningElement {
 
     handleClickSubmit(event) {
         this.openModal = true;
-        console.log(uRoleId);
+        // console.log(uRoleId);
+
         // this.currentRecordId='a008d000005UjhoAAC';
         // console.log('@@currentRecordId@@@'+this.currentRecordId);
         // updateToggle({cliId: this.currentRecordId})
@@ -145,6 +167,7 @@ export default class TimeSheetCmp extends LightningElement {
                     );
                     this.isLoading = false;
                     this.openModal = false;
+                    this.readOnly = true;
                     this.template.querySelector('c-heading-cmp').handleStatus();
                 }).catch(error => {
                     console.log(error);
@@ -181,6 +204,7 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleClickDraft() {
+        console.log(this.alertdata);
         insertTimesheetDays({ timsheetDays: this.timesheetDays }).then(result => {
             console.log(result);
         }).catch(error => {

@@ -2,6 +2,7 @@ import { api, LightningElement, track } from 'lwc';
 
 export default class Week extends LightningElement {
     week;
+    @api readOnly;
     @track earnings;
     tempEarningId = 1;
     weekDays = [];

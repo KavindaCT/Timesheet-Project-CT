@@ -2,14 +2,14 @@
     <lightning-layout if:true={earning}>
         <!-- BEGIN::Earning Type -->
         <lightning-layout-item size="3" class="slds-var-p-right_small">
-            <lightning-combobox data-id="earning-type" name="earningType" options={earningTypes}>
+            <lightning-combobox data-id="earning-type" name="earningType" options={earningTypes} disabled={readOnly}>
             </lightning-combobox>
         </lightning-layout-item>
         <!-- END::Earning Type -->
         <!-- BEGIN::Hour Inputs -->
         <lightning-layout-item size="1" for:each={weekDays} for:item="day" key={day.dayId}>
             <lightning-input data-id={day.dayId} class="slds-var-m-right_small" type="number" step="0.1"
-                onchange={handleChange} disabled={day.disabled}>
+                onchange={handleChange} disabled={day.disabled} read-only={readOnly}>
             </lightning-input>
         </lightning-layout-item>
         <lightning-layout-item size="1">
@@ -21,7 +21,7 @@
         <lightning-layout-item size="1">
             <div class="slds-var-m-top_large">
                 <lightning-button-icon icon-name="utility:close" size="x-small" alternative-text="Remove Item"
-                title="Remove Item" onclick={handleRemoveEarning}>
+                title="Remove Item" onclick={handleRemoveEarning} disabled={readOnly}>
             </lightning-button-icon>
             </div>
         </lightning-layout-item>
