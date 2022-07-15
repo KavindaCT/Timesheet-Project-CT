@@ -50,10 +50,46 @@ public with sharing class TimesheetDataService {
     }
 
     @AuraEnabled
-    public static void insertTimesheetDays(List<Map<String, String>> timesheetDays){
+    public static void insertTimesheetDays(List<Map<String, Object>> timesheetDays, String timesheetId){
         // [ { id: 10, earningType: 'ordinary', hours: [ { id: '', name: '', day: '', hours: 0} ], weekNUmber: 1 }, ]
+        Id id = Id.valueOf(timesheetId);
+        List<Timesheet_Day__c> timesheetDaysData = new List<Timesheet_Day__c>();
+
         try {
-            System.debug(timesheetDays);
+            for(Map<String, Object> earning : timesheetDays) {
+                List<Object> hours = (List<Object>) earning.get('hours');
+                String earningType = (String) earning.get('earningType');
+                String weekNumber = (String) String.valueOf(earning.get('weekNumber'));
+
+                if(hours.size() > 0) {
+                    for(Object day: hours) {
+                        TimesheetEarning.earningHoursWrapper timesheetDay = (TimesheetEarning.earningHoursWrapper) JSON.deserializeStrict(
+                            JSON.serialize(day), TimesheetEarning.earningHoursWrapper.class
+                        );
+
+                        if (timesheetDay.id != null) {
+                            Timesheet_Day__c updateDay = new Timesheet_Day__c(
+                                Id = (Id) timesheetDay.id,
+                                Hours__c = timesheetDay.hours,
+                                Timesheet__c = id
+                            );
+                            timesheetDaysData.add(updateDay);
+                        } else {
+                            Timesheet_Day__c newDay = new Timesheet_Day__c(
+                                Name = timesheetDay.name,
+                                Hours__c = timesheetDay.hours,
+                                Day__c = timesheetDay.day,
+                                Earning_Type__c = earningType,
+                                Week_Number__c = weekNumber,
+                                Timesheet__c = id
+                            );
+                            timesheetDaysData.add(newDay);
+                        }
+                    }
+                }
+            }
+
+            upsert timesheetDaysData;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }

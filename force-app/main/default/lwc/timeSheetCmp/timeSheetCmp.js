@@ -52,6 +52,7 @@ export default class TimeSheetCmp extends LightningElement {
     wiredTimesheetDays({ error, data }) {
         if (data) {
             this.timesheetDays = data;
+            // console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
             this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === this.activeWeekNumber);
             // console.log(this.timesheetDaysPerWeek);
         } else if (error) {
@@ -142,7 +143,7 @@ export default class TimeSheetCmp extends LightningElement {
     changeWeek(event) {
         this.activeWeek = event.detail.week; // { Weekstart, Weekending }
         this.activeWeekNumber = event.detail.weekNumber + 1;
-        if(this.timesheetDays) {
+        if (this.timesheetDays) {
             this.timesheetDaysPerWeek = [];
             this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === event.detail.weekNumber + 1);
         }
@@ -184,12 +185,12 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleChangeValue(event) {
-        var newTimesheetDays =JSON.parse(JSON.stringify(this.timesheetDays));
+        var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
         const dayId = event.detail.dayId;
 
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
 
-        if(dayId !== '') {
+        if (dayId !== '') {
             let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
         } else {
@@ -204,11 +205,23 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleClickDraft() {
-        console.log(this.alertdata);
-        insertTimesheetDays({ timsheetDays: this.timesheetDays }).then(result => {
+        insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
             console.log(result);
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success! Your hours successfully saved',
+                    variant: 'success'
+                })
+            );
         }).catch(error => {
             console.log(error);
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Something went wrong!',
+                    message: 'Your changed not saved, Please try again later',
+                    variant: 'error'
+                })
+            );
         });
     }
 
