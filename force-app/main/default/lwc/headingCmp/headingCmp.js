@@ -122,8 +122,8 @@ export default class HeadingCmp extends LightningElement {
         this.dispatchEvent(new CustomEvent('changeweek', { detail: { week: this.weeks[weekNumber], weekNumber: weekNumber } }));
     }
 
-    @api
-    handleStatus() {
-        this.timesheetStatus = 'Submitted';
-    }
+    // @api
+    // handleStatus() {
+    //     this.timesheetStatus = 'Submitted';
+    // }
 }

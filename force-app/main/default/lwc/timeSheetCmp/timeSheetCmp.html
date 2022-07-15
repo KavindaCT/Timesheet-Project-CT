@@ -50,7 +50,7 @@
                 <div class="slds-modal__footer">
                     <!-- <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
                         onclick={cancelApprovers}>Cancel</button> -->
-                    <button class="slds-button slds-button_brand" onclick={sendToApprove}>Submit</button>
+                    <button class="slds-button slds-button_brand" onclick={sendToApprove} disabled={disableSubmit}>Submit</button>
                 </div>
             </div>
             <template if:true={isLoading}>
