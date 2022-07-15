@@ -45,6 +45,17 @@ public with sharing class TimesheetEarning {
                     earningTypes.add(timesheetDay.Earning_Type__c);
                 }
             }
+        }else{
+            for(Integer i = 1; i <= 5; i++){
+                List <earningHoursWrapper> earningHoursList = new List<earningHoursWrapper> ();
+                earningsWrapper earningWeek = new earningsWrapper(); 
+                earningWeek.id = i +'0'; // 10
+                earningWeek.earningType = '';
+                earningWeek.weekNumber = i;
+                earningWeek.hours = earningHoursList;
+                earnings.add(earningWeek);
+                
+            }
         }
 
         // Map<String, List<Timesheet_Day__c>> dataMap = new Map<String, List<Timesheet_Day__c>>{

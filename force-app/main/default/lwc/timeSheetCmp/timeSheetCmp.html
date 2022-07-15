@@ -8,16 +8,16 @@
                 <c-heading-cmp time-period={timePeriod} onchangeweek={changeWeek}></c-heading-cmp>
             </lightning-layout-item>
             <lightning-layout-item size="12" if:true={activeWeek} class="">
-                <c-week current-week={activeWeek} earning-data={timesheetDaysPerWeek} onchangevalue={handleChangeValue}></c-week>
+                <c-week current-week={activeWeek} earning-data={timesheetDaysPerWeek} onchangevalue={handleChangeValue} read-only={readOnly}></c-week>
             </lightning-layout-item>
         </lightning-layout>
 
         <!-- <lightning-button variant="destructive-text" label="Delete timesheet" title="" onclick={handleClickDelete}
                 class="deletebutton slds-var-m-around_small slds-float_left"></lightning-button> -->
-        <lightning-button variant="neutral" slot="footer" label="Save draft" title="Primary action"
+        <lightning-button variant="neutral" slot="footer" label="Save draft" title="Primary action" disabled={readOnly}
             onclick={handleClickDraft} class="draftbutton slds-var-m-around_large slds-var-m-horizontal_large">
         </lightning-button>
-        <lightning-button variant="brand" slot="footer" label="Submit" value="Draft" onclick={handleClickSubmit}
+        <lightning-button variant="brand" slot="footer" label="Submit" value="Draft" onclick={handleClickSubmit} disabled={readOnly}
             class="submitbutton slds-var-m-around_large slds-var-m-horizontal_large"></lightning-button>
 
         <lightning-button variant="brand" slot="footer" label="Cancel" onclick={handleClickCancel}

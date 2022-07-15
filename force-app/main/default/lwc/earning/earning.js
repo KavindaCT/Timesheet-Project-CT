@@ -2,6 +2,7 @@ import { LightningElement, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 export default class Earning extends LightningElement {
     earning;
+    @api readOnly;
     @api weekDays;
     earningType;
     error = false;
@@ -36,6 +37,7 @@ export default class Earning extends LightningElement {
             this.template.querySelector(`[data-id="total-hours"]`).value = total;
         }
     }
+
 
     set earningData(value) {
         this.earning = value;
