@@ -1,14 +1,15 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-
+import { refreshApex } from '@salesforce/apex';
 import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheetDays';
 import submitForApproval from '@salesforce/apex/SubmitTimesheetforApproval.submitForApproval';
 import getRoleSubordinateUsers from '@salesforce/apex/RoleHierachy.getRoleSubordinateUsers';
 import insertTimesheetDays from '@salesforce/apex/TimesheetDataService.insertTimesheetDays';
+import ID_FIELD from '@salesforce/schema/Timesheet__c.Id';
 import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import MONTHLY_TOT_FIELD from '@salesforce/schema/Timesheet__c.Monthly_Total__c';
 import uId from '@salesforce/user/Id';
-import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
+import { getRecord, updateRecord } from 'lightning/uiRecordApi';
 
 const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD];
 export default class TimeSheetCmp extends LightningElement {
@@ -45,9 +46,6 @@ export default class TimeSheetCmp extends LightningElement {
             console.log(JSON.stringify(error));
         }
     }
-
-
-
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', currentUser: '$currentUserId' })
     wiredTimesheetDays({ error, data }) {
@@ -96,17 +94,21 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
+    disableSubmit() {
+        return this.approverId == null ? true : false;
+    }
 
     handleChangeApprover(event) {
         this.approverId = event.target.value;
     }
 
-    handleClickSubmit(event) {
+    handleClickSubmit() {
         this.openModal = true;
         this.isLoading = true;
 
         insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
             console.log(result);
+            // this.updateTimesheetStatus();
             this.isLoading = false;
         }).catch(error => {
             console.log(error);
@@ -120,6 +122,8 @@ export default class TimeSheetCmp extends LightningElement {
                 })
             );
         });
+
+        this.updateTimesheetStatus();
         // this.currentRecordId='a008d000005UjhoAAC';
         // console.log('@@currentRecordId@@@'+this.currentRecordId);
         // updateToggle({cliId: this.currentRecordId})
@@ -217,6 +221,36 @@ export default class TimeSheetCmp extends LightningElement {
                 })
             );
         });
+    }
+
+    updateTimesheetStatus() {
+        const updateFields = {};
+        updateFields[ID_FIELD.fieldApiName] = this.timesheetId;
+        updateFields[STATUS_FIELD.fieldApiName] = 'Submitted';
+        const recordInput = { updateFields };
+
+        updateRecord(recordInput)
+            .then(() => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Success!',
+                        variant: 'success'
+                    })
+                );
+                // Display fresh data in the form
+                return refreshApex(this.timesheetBasicData);
+            })
+            .catch(error => {
+                console.log(error);
+                this.openModal = false;
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Something went wrong!',
+                        message: 'Please try again later',
+                        variant: 'error'
+                    })
+                );
+            });
     }
 
     handleClickDelete() { }
