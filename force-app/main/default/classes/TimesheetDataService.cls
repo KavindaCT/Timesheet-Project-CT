@@ -38,17 +38,6 @@ public with sharing class TimesheetDataService {
         return earnings;
     }
 
-    @AuraEnabled(cacheable=true)
-    public static List<User> getAllApprovers(){
-        try {
-            return [
-                SELECT Id, Name FROM User
-            ];
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
-
     @AuraEnabled
     public static void insertTimesheetDays(List<Map<String, Object>> timesheetDays, String timesheetId){
         // [ { id: 10, earningType: 'ordinary', hours: [ { id: '', name: '', day: '', hours: 0} ], weekNUmber: 1 }, ]

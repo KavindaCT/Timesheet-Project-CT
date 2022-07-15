@@ -2,16 +2,14 @@ import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheetDays';
-import getAllApprovers from '@salesforce/apex/TimesheetDataService.getAllApprovers';
 import submitForApproval from '@salesforce/apex/SubmitTimesheetforApproval.submitForApproval';
 import getRoleSubordinateUsers from '@salesforce/apex/RoleHierachy.getRoleSubordinateUsers';
-import UsrRoleId from '@salesforce/schema/User.UserRoleId';
 import insertTimesheetDays from '@salesforce/apex/TimesheetDataService.insertTimesheetDays';
 import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import uId from '@salesforce/user/Id';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 
-const fields =[STATUS_FIELD];
+const fields = [STATUS_FIELD];
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
@@ -24,28 +22,27 @@ export default class TimeSheetCmp extends LightningElement {
     availableApprovers = [];
     currentUserId = uId;
     approverId;
-    availableApprovers =[];
     roleId;
     isLoading = true;
     readOnly = false;
     alertdata;
 
     @wire(getRecord, { recordId: '$timesheetId', fields })
-    account({error, data}){
-        if(data){
-          this.alertdata = data;
-          if(this.alertdata.fields.Status__c.value =='Submitted' || this.alertdata.fields.Status__c.value =='Approved' ){
-            this.readOnly = true;
-        }else{
-            this.readOnly = false;
+    account({ error, data }) {
+        if (data) {
+            this.alertdata = data;
+            if (this.alertdata.fields.Status__c.value === 'Submitted' || this.alertdata.fields.Status__c.value === 'Approved') {
+                this.readOnly = true;
+            } else {
+                this.readOnly = false;
+            }
+            console.log(JSON.stringify(this.alertdata.fields.Status__c.value));
+        } else if (error) {
+            console.log(JSON.stringify(error));
         }
-          console.log(JSON.stringify(this.alertdata.fields.Status__c.value));
-        }else if(error){
-          console.log(JSON.stringify(error)); 
-        }
-      };
+    }
 
-   
+
 
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', currentUser: '$currentUserId' })
@@ -66,29 +63,6 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
-    // @wire(getAllApprovers)
-    // wiredApprovers({ error, data }) {
-    //     if (data) {
-    //         this.availableApprovers = data.map(approver => {
-    //             return {
-    //                 label: approver.Name,
-    //                 value: approver.Id
-    //             }
-    //         });
-    //         this.isLoading = false;
-    //         console.log(JSON.stringify(this.availableApprovers));
-    //     } else if (error) {
-    //         this.dispatchEvent(
-    //             new ShowToastEvent({
-    //                 title: 'Error while getting approvers',
-    //                 message: error.body.message,
-    //                 variant: 'error',
-    //             }),
-    //         );
-    //         this.isLoading = false;
-    //     }
-    // }
-
     @wire(getRoleSubordinateUsers)
     wiredApprovers({ error, data }) {
         if (data) {
@@ -97,14 +71,14 @@ export default class TimeSheetCmp extends LightningElement {
             //  }
             // this.roleId = data;
             this.availableApprovers = data.map(approver => {
-                            return {
-                                label: approver.Name,
-                                value: approver.Id
-                            }
-                        });
-                        this.isLoading = false;
-                        // console.log(JSON.stringify(this.availableApprovers));
-            
+                return {
+                    label: approver.Name,
+                    value: approver.Id
+                }
+            });
+            this.isLoading = false;
+            // console.log(JSON.stringify(this.availableApprovers));
+
             this.isLoading = false;
         } else if (error) {
             this.dispatchEvent(
@@ -117,7 +91,7 @@ export default class TimeSheetCmp extends LightningElement {
             this.isLoading = false;
         }
     }
-    
+
 
     handleChangeApprover(event) {
         this.approverId = event.target.value;
