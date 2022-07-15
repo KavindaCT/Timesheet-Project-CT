@@ -6,10 +6,11 @@ import submitForApproval from '@salesforce/apex/SubmitTimesheetforApproval.submi
 import getRoleSubordinateUsers from '@salesforce/apex/RoleHierachy.getRoleSubordinateUsers';
 import insertTimesheetDays from '@salesforce/apex/TimesheetDataService.insertTimesheetDays';
 import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
+import MONTHLY_TOT_FIELD from '@salesforce/schema/Timesheet__c.Monthly_Total__c';
 import uId from '@salesforce/user/Id';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 
-const fields = [STATUS_FIELD];
+const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD];
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
@@ -25,18 +26,21 @@ export default class TimeSheetCmp extends LightningElement {
     roleId;
     isLoading = true;
     readOnly = false;
-    alertdata;
+    timesheetBasicData;
+    timesheetStatus;
+    monthlyTotal = 0;
 
     @wire(getRecord, { recordId: '$timesheetId', fields })
     account({ error, data }) {
         if (data) {
-            this.alertdata = data;
-            if (this.alertdata.fields.Status__c.value === 'Submitted' || this.alertdata.fields.Status__c.value === 'Approved') {
+            this.timesheetBasicData = data;
+            if (this.timesheetBasicData.fields.Status__c.value === 'Submitted' || this.timesheetBasicData.fields.Status__c.value === 'Approved') {
                 this.readOnly = true;
             } else {
                 this.readOnly = false;
             }
-            console.log(JSON.stringify(this.alertdata.fields.Status__c.value));
+            this.timesheetStatus = this.timesheetBasicData.fields.Status__c.value;
+            this.monthlyTotal = this.timesheetBasicData.fields.Monthly_Total__c.value;
         } else if (error) {
             console.log(JSON.stringify(error));
         }
@@ -99,8 +103,23 @@ export default class TimeSheetCmp extends LightningElement {
 
     handleClickSubmit(event) {
         this.openModal = true;
-        // console.log(uRoleId);
+        this.isLoading = true;
 
+        insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
+            console.log(result);
+            this.isLoading = false;
+        }).catch(error => {
+            console.log(error);
+            this.openModal = false;
+            this.isLoading = false;
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Something went wrong!',
+                    message: 'Your changes not saved, Please try again later',
+                    variant: 'error'
+                })
+            );
+        });
         // this.currentRecordId='a008d000005UjhoAAC';
         // console.log('@@currentRecordId@@@'+this.currentRecordId);
         // updateToggle({cliId: this.currentRecordId})
@@ -123,9 +142,9 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
-    cancelApprovers() {
-        this.openModal = false;
-    }
+    // cancelApprovers() {
+    //     this.openModal = false;
+    // }
 
     sendToApprove() {
         this.isLoading = true;
@@ -161,6 +180,7 @@ export default class TimeSheetCmp extends LightningElement {
     handleChangeValue(event) {
         var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
         const dayId = event.detail.dayId;
+        this.monthlyTotal = '';
 
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
 
