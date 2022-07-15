@@ -2,24 +2,27 @@
     <lightning-layout class="">
         <lightning-layout-item class="slds-box" size="7">
             <div class="slds-text-heading_small"><b>Status</b></div>
-            <div class="slds-text-heading_large slds-var-p-top_x-small"><b>{Draft}</b></div>
+            <div class="slds-text-heading_large slds-var-p-top_x-small"><b>{timesheetStatus}</b></div>
         </lightning-layout-item>
         <lightning-layout-item class="slds-box" size="3">
             <div class="slds-text-heading_small"><b>Week ending</b></div>
-            <lightning-button-icon icon-name="utility:chevronleft" alternative-text="Previous" class="slds-float_left slds-var-p-top_x-small"
-                onclick={switchTopreviousWeek} disabled={disablePreviousButton}>
+            <lightning-button-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                class="slds-float_left slds-var-p-top_x-small" onclick={switchTopreviousWeek}
+                disabled={disablePreviousButton}>
             </lightning-button-icon>
             <p class="slds-text-heading_large slds-float_left slds-var-p-horizontal_large slds-var-p-top_x-small"><b>
-                {date}
+                    {date}
                 </b>
             </p>
-            <lightning-button-icon icon-name="utility:chevronright" alternative-text="Next" class="slds-float_right slds-var-p-top_x-small"
-                onclick={switchToNextWeek} disabled={disableNextButton}>
+            <lightning-button-icon icon-name="utility:chevronright" alternative-text="Next"
+                class="slds-float_right slds-var-p-top_x-small" onclick={switchToNextWeek} disabled={disableNextButton}>
             </lightning-button-icon>
         </lightning-layout-item>
         <lightning-layout-item class="slds-box" size="2">
             <div class="slds-text-heading_small slds-text-align_right"><b>Monthly Total</b></div>
-            <div class="slds-text-heading_large slds-var-p-top_x-small slds-text-align_right"><b>0.00</b></div>
+            <div class="slds-text-heading_large slds-var-p-top_x-small slds-text-align_right">
+                <lightning-formatted-number value={monthlyTotal} minimum-fraction-digits="2"></lightning-formatted-number>
+            </div>
         </lightning-layout-item>
     </lightning-layout>
 </template>
