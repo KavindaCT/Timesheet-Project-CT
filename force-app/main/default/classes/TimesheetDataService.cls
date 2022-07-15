@@ -71,6 +71,7 @@ public with sharing class TimesheetDataService {
                             Timesheet_Day__c updateDay = new Timesheet_Day__c(
                                 Id = (Id) timesheetDay.id,
                                 Hours__c = timesheetDay.hours,
+                                Earning_Type__c = earningType,
                                 Timesheet__c = id
                             );
                             timesheetDaysData.add(updateDay);
