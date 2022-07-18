@@ -202,6 +202,18 @@ export default class TimeSheetCmp extends LightningElement {
         this.timesheetDays = newTimesheetDays;
     }
 
+    handleEarningTypeChange(event) {
+        var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+        const earningId = event.detail.id;
+
+        if(earningId !== null) {
+            let index = this.timesheetDays.findIndex(earning => earning.id === earningId);
+            newTimesheetDays[index].earningType = event.detail.earningType;
+        }
+
+        this.timesheetDays = newTimesheetDays;
+    }
+
     handleClickDraft() {
         insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
             console.log(result);

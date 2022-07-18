@@ -4,7 +4,7 @@ export default class Earning extends LightningElement {
     earning;
     @api readOnly;
     @api weekDays;
-    earningType;
+    earningType = 'Ordinary Hours';
     error = false;
 
     renderedCallback() {
@@ -94,6 +94,13 @@ export default class Earning extends LightningElement {
         }
 
         this.template.querySelector('[data-id="total-hours"]').value = newTotal;
+    }
+
+    handleEarningChange(event) {
+        const value = event.target.value;
+        if(value !== null && value !== undefined) {
+            this.dispatchEvent(new CustomEvent('changeearning', { detail: { earningType: this.earningType, id: this.earning.id }}));
+        }
     }
 
     handleRemoveEarning() {

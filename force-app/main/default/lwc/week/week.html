@@ -17,7 +17,7 @@
             <!-- BEGIN::Earnings -->
             <lightning-layout-item size="12" for:each={earnings} for:item="earning" key={earning.Id}>
                 <c-earning earning-data={earning} week-days={weekDays} onremove={removeEarning}
-                    onchangevalue={changeValue} read-only={readOnly}></c-earning>
+                    onchangevalue={changeValue} onchangeearning={handleChangeEarningType} read-only={readOnly}></c-earning>
             </lightning-layout-item>
             <!-- BEGIN::Earnings -->
             <!-- BEGIN::Add another row button -->

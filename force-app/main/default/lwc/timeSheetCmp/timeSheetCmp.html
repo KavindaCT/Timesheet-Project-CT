@@ -10,7 +10,7 @@
             </lightning-layout-item>
             <lightning-layout-item size="12" if:true={activeWeek} class="">
                 <c-week current-week={activeWeek} earning-data={timesheetDaysPerWeek} onchangevalue={handleChangeValue}
-                    read-only={readOnly}></c-week>
+                    onchangeearningtype={handleEarningTypeChange} read-only={readOnly}></c-week>
             </lightning-layout-item>
         </lightning-layout>
 
