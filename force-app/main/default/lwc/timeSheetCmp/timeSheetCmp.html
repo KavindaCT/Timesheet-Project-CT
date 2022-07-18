@@ -5,10 +5,12 @@
             <lightning-layout-item size="12">
             </lightning-layout-item>
             <lightning-layout-item size="12" class="slds-var-m-bottom_small">
-                <c-heading-cmp time-period={timePeriod} onchangeweek={changeWeek}></c-heading-cmp>
+                <c-heading-cmp time-period={timePeriod} onchangeweek={changeWeek} timesheet-status={timesheetStatus}
+                    monthly-total={monthlyTotal}></c-heading-cmp>
             </lightning-layout-item>
             <lightning-layout-item size="12" if:true={activeWeek} class="">
-                <c-week current-week={activeWeek} earning-data={timesheetDaysPerWeek} onchangevalue={handleChangeValue} read-only={readOnly}></c-week>
+                <c-week current-week={activeWeek} earning-data={timesheetDaysPerWeek} onchangevalue={handleChangeValue}
+                    read-only={readOnly}></c-week>
             </lightning-layout-item>
         </lightning-layout>
 
@@ -17,8 +19,9 @@
         <lightning-button variant="neutral" slot="footer" label="Save draft" title="Primary action" disabled={readOnly}
             onclick={handleClickDraft} class="draftbutton slds-var-m-around_large slds-var-m-horizontal_large">
         </lightning-button>
-        <lightning-button variant="brand" slot="footer" label="Submit" value="Draft" onclick={handleClickSubmit} disabled={readOnly}
-            class="submitbutton slds-var-m-around_large slds-var-m-horizontal_large"></lightning-button>
+        <lightning-button variant="brand" slot="footer" label="Submit" value="Draft" onclick={handleClickSubmit}
+            disabled={readOnly} class="submitbutton slds-var-m-around_large slds-var-m-horizontal_large">
+        </lightning-button>
 
         <lightning-button variant="brand" slot="footer" label="Cancel" onclick={handleClickCancel}
             class="cancelbutton slds-var-m-around_large slds-var-m-horizontal_large "></lightning-button>
@@ -31,12 +34,12 @@
         <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
             class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
-                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                <!-- <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
                     onclick={cancelApprovers}>
                     <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small">
                     </lightning-icon>
                     <span class="slds-assistive-text">Close</span>
-                </button>
+                </button> -->
                 <div class="slds-modal__header">
                     <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Submit Timesheet</h2>
                 </div>
@@ -45,9 +48,9 @@
                         value={approverId} onchange={handleChangeApprover}></lightning-combobox>
                 </div>
                 <div class="slds-modal__footer">
-                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
-                        onclick={cancelApprovers}>Cancel</button>
-                    <button class="slds-button slds-button_brand" onclick={sendToApprove}>Submit</button>
+                    <!-- <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={cancelApprovers}>Cancel</button> -->
+                    <button class="slds-button slds-button_brand" onclick={sendToApprove} disabled={disableSubmit}>Submit</button>
                 </div>
             </div>
             <template if:true={isLoading}>

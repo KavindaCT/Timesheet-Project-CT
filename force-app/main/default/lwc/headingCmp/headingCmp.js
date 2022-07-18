@@ -1,14 +1,13 @@
-import { LightningElement, track, api } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 export default class HeadingCmp extends LightningElement {
     @api timePeriod;
     weeks = []; // [{ weekEnding: '', weekStart: '', weekNumber: 0 }]
 
-    @track Draft;
+    @api timesheetStatus;
+    @api monthlyTotal;
     date;
     currentWeekNumber = 0;
-
-    Draft = 'Draft'; //status
     disablePreviousButton = true;
     disableNextButton = false;
 
@@ -123,8 +122,8 @@ export default class HeadingCmp extends LightningElement {
         this.dispatchEvent(new CustomEvent('changeweek', { detail: { week: this.weeks[weekNumber], weekNumber: weekNumber } }));
     }
 
-    @api
-    handleStatus() {
-        this.Draft = 'Submitted';
-    }
+    // @api
+    // handleStatus() {
+    //     this.timesheetStatus = 'Submitted';
+    // }
 }
