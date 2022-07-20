@@ -4,7 +4,7 @@ export default class Earning extends LightningElement {
     earning;
     @api readOnly;
     @api weekDays;
-    earningType = 'Ordinary Hours';
+    earningType;
     error = false;
 
     renderedCallback() {

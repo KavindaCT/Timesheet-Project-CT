@@ -50,7 +50,7 @@ public with sharing class TimesheetEarning {
                 List <earningHoursWrapper> earningHoursList = new List<earningHoursWrapper> ();
                 earningsWrapper earningWeek = new earningsWrapper(); 
                 earningWeek.id = i +'0'; // 10
-                earningWeek.earningType = '';
+                earningWeek.earningType = 'Ordinary Hours';
                 earningWeek.weekNumber = i;
                 earningWeek.hours = earningHoursList;
                 earnings.add(earningWeek);
