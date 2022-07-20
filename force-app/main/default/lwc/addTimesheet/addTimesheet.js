@@ -1,4 +1,4 @@
-import { LightningElement, wire } from 'lwc';
+import { api, LightningElement, wire } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 import {
   publish,
@@ -7,10 +7,7 @@ import {
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import TimesheetMessageChannel from '@salesforce/messageChannel/TimesheetMessageChannel__c';
 import getRecentTimesheet from '@salesforce/apex/TimesheetDataService.getRecentTimesheet';
-import { createRecord, getRecord } from 'lightning/uiRecordApi';
-
-import uId from '@salesforce/user/Id';
-import NAME_FIELD from '@salesforce/schema/User.Name';
+import { createRecord } from 'lightning/uiRecordApi';
 
 import TIMESHEET_OBJECT from '@salesforce/schema/Timesheet__c';
 import TIMESHEET_NAME_FIELD from '@salesforce/schema/Timesheet__c.Name';
@@ -21,25 +18,15 @@ const MONTH = [
 ];
 
 export default class AddTimesheet extends NavigationMixin(LightningElement) {
-  showSpinner = true;
+  showSpinner;
   timeSheetId;
   timePeriod;
   timePeriodCheck;
-  currentUserId = uId;
-  currentUserName;
+  userId;
+  fullName;
 
   @wire(MessageContext)
   messageContext;
-
-  @wire(getRecord, { recordId: '$currentUserId', fields: [NAME_FIELD] })
-  wiredUser({ error, data }) {
-    if(data) {
-      this.currentUserName = data.fields.Name.value;
-      this.showSpinner = false;
-    } else if(error) {
-      console.log(error);
-    }
-  }
 
   connectedCallback() {
     const currentDate = new Date();
@@ -48,13 +35,35 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
 
   value = 'inProgress';
 
+  @api
+  get currentUserFullName() {
+    return this.fullName;
+  }
+  set currentUserFullName(value) {
+    this.showSpinner = true;
+    this.setAttribute('fullName', value);
+    this.fullName = value;
+    this.showSpinner = false;
+  }
+
+  @api
+  get currentUserId() {
+    return this.userId;
+  }
+  set currentUserId(value) {
+    this.showSpinner = true;
+    this.setAttribute('userId', value);
+    this.userId = value;
+    this.showSpinner = false;
+  }
+
   get options() {
     return [{ label: this.timePeriod, value: this.timePeriod }];
   }
 
   createNewTimesheet(timePeriod) {
     this.showSpinner = true;
-  
+
     const fields = {};
     fields[TIMESHEET_NAME_FIELD.fieldApiName] = timePeriod;
     fields[TIMESHEET_STATUS_FIELD.fieldApiName] = 'draft';
@@ -78,9 +87,9 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
 
   handlePeriodSelect(event) {
     this.showSpinner = true;
-    const currentTimePeriod = event.detail.value + ' - ' + this.currentUserName; // 'June 2022 - Employee Name' String
-    getRecentTimesheet({ timePeriod: currentTimePeriod, currentUser: this.currentUserId }).then(result => {
-      if(result.length > 0) {
+    const currentTimePeriod = event.detail.value + ' - ' + this.fullName; // 'June 2022 - Employee Name' String
+    getRecentTimesheet({ timePeriod: currentTimePeriod, currentUser: this.userId }).then(result => {
+      if (result.length > 0) {
         const payload = { timesheetId: result[0].Id, timesheetName: result[0].Name };
         publish(this.messageContext, TimesheetMessageChannel, payload);
       } else {
@@ -110,16 +119,16 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
   // }
 
   navigateToTimesheet() {
-    if(this.timePeriodCheck != null){
+    if (this.timePeriodCheck != null) {
       this.dispatchEvent(new CustomEvent("viewtimesheet"));
       this.sendTimePeriod();
-    }else{
+    } else {
       const event = new ShowToastEvent({
         title: 'Please select a period',
         variant: 'error',
-    });
-    this.dispatchEvent(event);
+      });
+      this.dispatchEvent(event);
     }
-    
+
   }
 }
