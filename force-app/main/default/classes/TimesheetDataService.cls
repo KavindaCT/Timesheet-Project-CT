@@ -1,4 +1,19 @@
 public with sharing class TimesheetDataService {
+    @AuraEnabled(cacheable=true)
+    public static List<Timesheet__c> getPreviousTimesheets(String currentUserId) {
+        List<Timesheet__c> previousTimesheets = new List<Timesheet__c>();
+        try {
+            previousTimesheets = [
+                SELECT ID, Name, Status__c FROM Timesheet__c
+                WHERE CreatedById = :currentUserId
+                LIMIT 3
+            ];
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+        return previousTimesheets;
+    }
+
     @AuraEnabled
     public static List<Timesheet__c> getRecentTimesheet(String timePeriod, String currentUser) {
         try {

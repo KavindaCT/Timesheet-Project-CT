@@ -3,6 +3,11 @@
         <c-payroll-dashboard onsetview={setView}></c-payroll-dashboard>
     </template>
     <template if:false={viewDashboard}>
-        <c-time-sheet-cmp time-period={timePeriod} timesheet-id={timesheetId}></c-time-sheet-cmp>
+        <template if:false={haveId}>
+            <lightning-spinner alternative-text="Loading" size="small" variant="brand"></lightning-spinner>
+        </template>
+        <template if:true={haveId}>
+            <c-time-sheet-cmp time-period={timePeriod} timesheet-id={timesheetId} onresetview={resetView}></c-time-sheet-cmp>
+        </template>
     </template>
 </template>

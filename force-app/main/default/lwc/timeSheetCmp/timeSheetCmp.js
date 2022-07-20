@@ -11,6 +11,7 @@ import uId from '@salesforce/user/Id';
 import { getRecord } from 'lightning/uiRecordApi';
 
 const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD];
+const STATUS = ['Submitted', 'Approved' , 'Rejected'];
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
@@ -38,7 +39,8 @@ export default class TimeSheetCmp extends LightningElement {
         const { error, data } = results;
         if (data) {
             this.timesheetBasicData = data;
-            if (this.timesheetBasicData.fields.Status__c.value === 'Submitted' || this.timesheetBasicData.fields.Status__c.value === 'Approved') {
+            // if (this.timesheetBasicData.fields.Status__c.value === 'Submitted' || this.timesheetBasicData.fields.Status__c.value === 'Approved') {
+            if(STATUS.includes(this.timesheetBasicData.fields.Status__c.value)) {
                 this.readOnly = true;
             } else {
                 this.readOnly = false;
@@ -242,5 +244,7 @@ export default class TimeSheetCmp extends LightningElement {
 
     handleClickDelete() { }
 
-    handleClickCancel() { }
+    handleClickCancel() {
+        this.dispatchEvent(new CustomEvent('resetview'));
+    }
 }
