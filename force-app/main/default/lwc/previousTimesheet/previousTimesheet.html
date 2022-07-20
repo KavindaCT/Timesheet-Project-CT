@@ -1,0 +1,10 @@
+<template>
+    <lightning-layout>
+        <lightning-layout-item size="3">{timesheet.Name}</lightning-layout-item>
+        <lightning-layout-item size="2"><span class={badgeClass}>{timesheet.Status__c}</span>
+        </lightning-layout-item>
+        <lightning-layout-item size="2">
+            <lightning-button variant="brand" label="View" onclick={handleClickView}></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>
