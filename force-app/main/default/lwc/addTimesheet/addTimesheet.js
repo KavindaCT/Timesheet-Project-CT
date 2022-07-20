@@ -24,6 +24,7 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
   showSpinner = true;
   timeSheetId;
   timePeriod;
+  timePeriodCheck;
   currentUserId = uId;
   currentUserName;
 
@@ -91,6 +92,7 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
     }).catch(error => {
       console.log(error);
     });
+    this.timePeriodCheck = currentTimePeriod;
   }
 
   // navigateWithoutAura() {
@@ -108,7 +110,16 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
   // }
 
   navigateToTimesheet() {
-    this.dispatchEvent(new CustomEvent("viewtimesheet"));
-    this.sendTimePeriod();
+    if(this.timePeriodCheck != null){
+      this.dispatchEvent(new CustomEvent("viewtimesheet"));
+      this.sendTimePeriod();
+    }else{
+      const event = new ShowToastEvent({
+        title: 'Please select a period',
+        variant: 'error',
+    });
+    this.dispatchEvent(event);
+    }
+    
   }
 }
