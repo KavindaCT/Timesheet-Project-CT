@@ -236,6 +236,10 @@ export default class TimeSheetCmp extends LightningElement {
         });
     }
 
+    hideModalBox(){
+        this.openModal = false;
+    }
+
     handleClickDelete() { }
 
     handleClickCancel() { }
