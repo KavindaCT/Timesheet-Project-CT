@@ -5,11 +5,10 @@ import getTimesheetDays from '@salesforce/apex/TimesheetDataService.getTimesheet
 import submitForApproval from '@salesforce/apex/SubmitTimesheetforApproval.submitForApproval';
 import getRoleSubordinateUsers from '@salesforce/apex/RoleHierachy.getRoleSubordinateUsers';
 import insertTimesheetDays from '@salesforce/apex/TimesheetDataService.insertTimesheetDays';
-import ID_FIELD from '@salesforce/schema/Timesheet__c.Id';
 import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import MONTHLY_TOT_FIELD from '@salesforce/schema/Timesheet__c.Monthly_Total__c';
 import uId from '@salesforce/user/Id';
-import { getRecord, updateRecord } from 'lightning/uiRecordApi';
+import { getRecord } from 'lightning/uiRecordApi';
 
 const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD];
 export default class TimeSheetCmp extends LightningElement {
@@ -27,12 +26,16 @@ export default class TimeSheetCmp extends LightningElement {
     roleId;
     isLoading = true;
     readOnly = false;
+    wiredTimesheetData;
     timesheetBasicData;
     timesheetStatus;
     monthlyTotal = 0;
 
     @wire(getRecord, { recordId: '$timesheetId', fields })
-    account({ error, data }) {
+    getTimesheetData(results) {
+        this.wiredTimesheetData = results;
+
+        const { error, data } = results;
         if (data) {
             this.timesheetBasicData = data;
             if (this.timesheetBasicData.fields.Status__c.value === 'Submitted' || this.timesheetBasicData.fields.Status__c.value === 'Approved') {
@@ -94,7 +97,7 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
-    disableSubmit() {
+    get disableSubmit() {
         return this.approverId == null ? true : false;
     }
 
@@ -108,7 +111,6 @@ export default class TimeSheetCmp extends LightningElement {
 
         insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
             console.log(result);
-            // this.updateTimesheetStatus();
             this.isLoading = false;
         }).catch(error => {
             console.log(error);
@@ -123,7 +125,6 @@ export default class TimeSheetCmp extends LightningElement {
             );
         });
 
-        this.updateTimesheetStatus();
         // this.currentRecordId='a008d000005UjhoAAC';
         // console.log('@@currentRecordId@@@'+this.currentRecordId);
         // updateToggle({cliId: this.currentRecordId})
@@ -163,10 +164,9 @@ export default class TimeSheetCmp extends LightningElement {
                             variant: 'success'
                         })
                     );
-                    this.isLoading = false;
                     this.openModal = false;
-                    this.readOnly = true;
-                    this.template.querySelector('c-heading-cmp').handleStatus();
+                    refreshApex(this.wiredTimesheetData);
+                    this.isLoading = false;
                 }).catch(error => {
                     console.log(error);
                     this.dispatchEvent(
@@ -223,6 +223,7 @@ export default class TimeSheetCmp extends LightningElement {
                     variant: 'success'
                 })
             );
+            refreshApex(this.wiredTimesheetData);
         }).catch(error => {
             console.log(error);
             this.dispatchEvent(
@@ -233,36 +234,6 @@ export default class TimeSheetCmp extends LightningElement {
                 })
             );
         });
-    }
-
-    updateTimesheetStatus() {
-        const updateFields = {};
-        updateFields[ID_FIELD.fieldApiName] = this.timesheetId;
-        updateFields[STATUS_FIELD.fieldApiName] = 'Submitted';
-        const recordInput = { updateFields };
-
-        updateRecord(recordInput)
-            .then(() => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success!',
-                        variant: 'success'
-                    })
-                );
-                // Display fresh data in the form
-                return refreshApex(this.timesheetBasicData);
-            })
-            .catch(error => {
-                console.log(error);
-                this.openModal = false;
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Something went wrong!',
-                        message: 'Please try again later',
-                        variant: 'error'
-                    })
-                );
-            });
     }
 
     handleClickDelete() { }
