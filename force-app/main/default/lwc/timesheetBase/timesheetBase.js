@@ -39,4 +39,12 @@ export default class TimesheetBase extends LightningElement {
             );
         }
     }
+
+    get haveId() {
+        return this.timesheetId !== null && this.timesheetId !== undefined;
+    }
+
+    resetView() {
+        this.viewDashboard = true;
+    }
 }
