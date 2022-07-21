@@ -131,7 +131,8 @@ export default class Week extends LightningElement {
         } else {
             let weekDay = day + this.daysOfWeek[day];
             let name = 'TD' + this.weekDays[day - 1].date.substring(4,6);
-            this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: event.detail.earningsId, dayId: '', day: weekDay, name: name, value: event.detail.value } }));
+            let date = this.weekDays[day - 1].date;
+            this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: event.detail.earningsId, dayId: '', day: weekDay, date: date, name: name, value: event.detail.value } }));
         }
     }
 
