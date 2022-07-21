@@ -34,7 +34,7 @@ public with sharing class TimesheetDataService {
         List<TimesheetEarning.earningsWrapper> earnings = new List<TimesheetEarning.earningsWrapper>();
         try {
             List<Timesheet_Day__c> timesheetDays =  [
-                SELECT Id, Name, Hours__c, Week_Number__c, Earning_Type__c, Day__c
+                SELECT Id, Name, Hours__c, Week_Number__c, Earning_Type__c, Day__c, Timesheet_Date__c
                 FROM Timesheet_Day__c
                 WHERE Timesheet__c = :timesheetId AND CreatedById = :currentUser
             ];
@@ -84,6 +84,7 @@ public with sharing class TimesheetDataService {
                                 Name = timesheetDay.name,
                                 Hours__c = timesheetDay.hours,
                                 Day__c = timesheetDay.day,
+                                Timesheet_Date__c = timesheetDay.timesheet_date,
                                 Earning_Type__c = earningType,
                                 Week_Number__c = weekNumber,
                                 Timesheet__c = id

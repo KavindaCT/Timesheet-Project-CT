@@ -194,11 +194,15 @@ export default class TimeSheetCmp extends LightningElement {
             let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
         } else {
+            let date = new Date(`${event.detail.date}${this.timePeriod.substring(4, 9)}`);
+
             newTimesheetDays[index].hours.push({
                 name: event.detail.name + '-' + this.timePeriod.substring(0, 9) + '-' + newTimesheetDays[index].earningType,
                 hours: event.detail.value,
-                day: event.detail.day
+                day: event.detail.day,
+                timesheet_date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
             });
+            // console.log(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
         }
 
         this.timesheetDays = newTimesheetDays;
