@@ -125,7 +125,8 @@ export default class Week extends LightningElement {
                 id: this.tempEarningId,
                 earningType: '',
                 hours: [],
-                weekNumber: this.weekNumber
+                weekNumber: this.weekNumber,
+                deleteFlag: false
             }
             this.dispatchEvent(new CustomEvent('newearning', { detail: newEarning }));
         }
@@ -152,6 +153,6 @@ export default class Week extends LightningElement {
     }
 
     removeEarning(event) {
-        this.earnings = this.earnings.filter(earning => !(earning.Id === event.detail.Id));
+        this.dispatchEvent(new CustomEvent('removeearning', { detail: event.detail }));
     }
 }

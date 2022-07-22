@@ -145,7 +145,7 @@ export default class TimeSheetCmp extends LightningElement {
         this.activeWeekNumber = event.detail.weekNumber + 1;
         if (this.timesheetDays) {
             this.timesheetDaysPerWeek = [];
-            this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === event.detail.weekNumber + 1);
+            this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === event.detail.weekNumber + 1 && !day.deleteFlag);
         }
     }
 
@@ -249,6 +249,21 @@ export default class TimeSheetCmp extends LightningElement {
             this.timesheetDaysPerWeek.push(event.detail);
         }
         this.timesheetDays = newTimesheetDays;
+    }
+
+    handleRemoveEarning(event) {
+        var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+
+        if(event) {
+            console.log('Delete');
+            const id = event.detail.id;
+            let index = this.timesheetDays.findIndex(earning => earning.id === id);
+            console.log(newTimesheetDays[index]);
+            newTimesheetDays[index].deleteFlag = true;
+            this.timesheetDaysPerWeek.splice(index, 1);
+        }
+        console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
+        console.log(JSON.parse(JSON.stringify(this.timesheetDaysPerWeek)));
     }
 
     hideModalBox(){

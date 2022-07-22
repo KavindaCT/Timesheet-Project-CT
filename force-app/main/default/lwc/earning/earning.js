@@ -107,7 +107,7 @@ export default class Earning extends LightningElement {
     }
 
     handleRemoveEarning() {
-        const removeEarning = new CustomEvent('remove', { detail: { Id: this.earning.id } });
+        const removeEarning = new CustomEvent('remove', { detail: { id: this.earning.id } });
         this.dispatchEvent(removeEarning);
     }
 }

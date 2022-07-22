@@ -57,45 +57,66 @@ public with sharing class TimesheetDataService {
     public static void insertTimesheetDays(List<Map<String, Object>> timesheetDays, String timesheetId){
         // [ { id: 10, earningType: 'ordinary', hours: [ { id: '', name: '', day: '', hours: 0} ], weekNUmber: 1 }, ]
         Id id = Id.valueOf(timesheetId);
-        List<Timesheet_Day__c> timesheetDaysData = new List<Timesheet_Day__c>();
+        List<Timesheet_Day__c> timesheetDaysDataUpsert = new List<Timesheet_Day__c>();
+        List<Timesheet_Day__c> timesheetDaysDataDelete = new List<Timesheet_Day__c>();
 
         try {
             for(Map<String, Object> earning : timesheetDays) {
                 List<Object> hours = (List<Object>) earning.get('hours');
                 String earningType = (String) earning.get('earningType');
                 String weekNumber = (String) String.valueOf(earning.get('weekNumber'));
+                boolean deleteFlag = (Boolean) earning.get(deleteFlag);
 
                 if(hours.size() > 0) {
-                    for(Object day: hours) {
-                        TimesheetEarning.earningHoursWrapper timesheetDay = (TimesheetEarning.earningHoursWrapper) JSON.deserializeStrict(
-                            JSON.serialize(day), TimesheetEarning.earningHoursWrapper.class
-                        );
+                    if(!deleteFlag) {
+                        for(Object day: hours) {
+                            TimesheetEarning.earningHoursWrapper timesheetDay = (TimesheetEarning.earningHoursWrapper) JSON.deserializeStrict(
+                                JSON.serialize(day), TimesheetEarning.earningHoursWrapper.class
+                            );
+    
+                            if (timesheetDay.id != null) {
+                                Timesheet_Day__c updateDay = new Timesheet_Day__c(
+                                    Id = (Id) timesheetDay.id,
+                                    Hours__c = timesheetDay.hours,
+                                    Earning_Type__c = earningType,
+                                    Timesheet__c = id
+                                );
+                                timesheetDaysData.add(updateDay);
+                            } else {
+                                Timesheet_Day__c newDay = new Timesheet_Day__c(
+                                    Name = timesheetDay.Name,
+                                    Hours__c = timesheetDay.hours,
+                                    Day__c = timesheetDay.day,
+                                    Timesheet_Date__c = timesheetDay.timesheet_date,
+                                    Earning_Type__c = earningType,
+                                    Week_Number__c = weekNumber,
+                                    Timesheet__c = id
+                                );
+                                timesheetDaysData.add(newDay);
+                            }
+                        }
+                    } else {
+                        for(Object day: hours) {
+                            TimesheetEarning.earningHoursWrapper timesheetDay = (TimesheetEarning.earningHoursWrapper) JSON.deserializeStrict(
+                                JSON.serialize(day), TimesheetEarning.earningHoursWrapper.class
+                            );
 
-                        if (timesheetDay.id != null) {
-                            Timesheet_Day__c updateDay = new Timesheet_Day__c(
-                                Id = (Id) timesheetDay.id,
-                                Hours__c = timesheetDay.hours,
-                                Earning_Type__c = earningType,
-                                Timesheet__c = id
-                            );
-                            timesheetDaysData.add(updateDay);
-                        } else {
-                            Timesheet_Day__c newDay = new Timesheet_Day__c(
-                                Name = timesheetDay.name,
-                                Hours__c = timesheetDay.hours,
-                                Day__c = timesheetDay.day,
-                                Timesheet_Date__c = timesheetDay.timesheet_date,
-                                Earning_Type__c = earningType,
-                                Week_Number__c = weekNumber,
-                                Timesheet__c = id
-                            );
-                            timesheetDaysData.add(newDay);
+                            if (timesheetDay.id != null) {
+                                Timesheet_Day__c deleteDay = new Timesheet_Day__c(
+                                    Id = (Id) timesheetDay.id,
+                                    Hours__c = timesheetDay.hours,
+                                    Earning_Type__c = earningType,
+                                    Timesheet__c = id
+                                );
+                                timesheetDaysDataDelete.add(deleteDay);
+                            }
                         }
                     }
                 }
             }
 
-            upsert timesheetDaysData;
+            upsert timesheetDaysDataUpsert;
+            delete timesheetDaysDataDelete;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }

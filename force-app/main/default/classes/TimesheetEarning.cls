@@ -53,6 +53,7 @@ public with sharing class TimesheetEarning {
                 earningWeek.earningType = 'Ordinary Hours';
                 earningWeek.weekNumber = i;
                 earningWeek.hours = earningHoursList;
+                earningWeek.deleteFlag = false;
                 earnings.add(earningWeek);
                 
             }
@@ -73,6 +74,7 @@ public with sharing class TimesheetEarning {
                 newEarningForWeek1.id = '1' + String.valueOf(index); // 10
                 newEarningForWeek1.earningType = earningType;
                 newEarningForWeek1.weekNumber = 1;
+                newEarningForWeek1.deleteFlag = false;
 
                 if (week1.size() > 0) {
                     for (Timesheet_Day__c day1 : week1) {
@@ -96,6 +98,7 @@ public with sharing class TimesheetEarning {
                 newEarningForWeek2.id = '2' + String.valueOf(index); // 20
                 newEarningForWeek2.earningType = earningType;
                 newEarningForWeek2.weekNumber = 2;
+                newEarningForWeek2.deleteFlag = false;
 
             if (week2.size() > 0) {
                 for (Timesheet_Day__c day2 : week2) {
@@ -119,6 +122,7 @@ public with sharing class TimesheetEarning {
                 newEarningForWeek3.id = '3' + String.valueOf(index); // 30
                 newEarningForWeek3.earningType = earningType;
                 newEarningForWeek3.weekNumber = 3;
+                newEarningForWeek3.deleteFlag = false;
 
             if (week3.size() > 0) {
                 for (Timesheet_Day__c day3 : week3) {
@@ -142,6 +146,7 @@ public with sharing class TimesheetEarning {
                 newEarningForWeek4.id = '4' + String.valueOf(index); // 40
                 newEarningForWeek4.earningType = earningType;
                 newEarningForWeek4.weekNumber = 4;
+                newEarningForWeek4.deleteFlag = false;
 
             if (week4.size() > 0) {
                 for (Timesheet_Day__c day4 : week4) {
@@ -165,6 +170,7 @@ public with sharing class TimesheetEarning {
                 newEarningForWeek5.id = '5' + String.valueOf(index); // 50
                 newEarningForWeek5.earningType = earningType;
                 newEarningForWeek5.weekNumber = 5;
+                newEarningForWeek5.deleteFlag = false;
 
             if (week5.size() > 0) {
                 for (Timesheet_Day__c day5 : week5) {
@@ -203,6 +209,8 @@ public with sharing class TimesheetEarning {
         public Integer weekNumber;
         @AuraEnabled
         public List<earningHoursWrapper> hours;
+        @AuraEnabled
+        public Boolean deleteFlag;
     }
 
     public class earningHoursWrapper {
