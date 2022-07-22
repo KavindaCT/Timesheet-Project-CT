@@ -20,7 +20,7 @@ export default class TimeSheetCmp extends LightningElement {
     openModal = false;
     currentRecordId;
     @track timesheetDays;
-    timesheetDaysPerWeek;
+    @track timesheetDaysPerWeek;
     availableApprovers = [];
     currentUserId = uId;
     approverId;
@@ -240,6 +240,15 @@ export default class TimeSheetCmp extends LightningElement {
                 })
             );
         });
+    }
+
+    handleAddNewEarning(event) {
+        var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+        if(event) {
+            newTimesheetDays.push(event.detail);
+            this.timesheetDaysPerWeek.push(event.detail);
+        }
+        this.timesheetDays = newTimesheetDays;
     }
 
     hideModalBox(){

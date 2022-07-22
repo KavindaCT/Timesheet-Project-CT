@@ -4,9 +4,10 @@ export default class Week extends LightningElement {
     week;
     @api readOnly;
     @track earnings;
-    tempEarningId = 1;
+    tempEarningId;
     weekDays = [];
     daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    weekNumber;
 
     // @track earnings = [
     //     { Id: 1, earningType: 'ordinary', hours: [0, 0, 0, 0, 0, 0, 0], weekNUmber: 0 }, // hours: [ { Id: '', day: '', hours: 0} ]
@@ -105,7 +106,12 @@ export default class Week extends LightningElement {
     }
 
     set earningData(value) {
-        this.earnings = value;
+        this.earnings = value; // value - [{ id: '10', earningType: '', hours: [], weekNumber: '' }]
+        if(value) {
+            const earningObj = value[value.length - 1];
+            this.tempEarningId = parseInt(earningObj.id, 10) + 1;
+            this.weekNumber = earningObj.weekNumber;
+        }
     }
 
     @api
@@ -114,12 +120,16 @@ export default class Week extends LightningElement {
     }
 
     addNewEarning() {
+        if(this.tempEarningId && this.weekNumber) {
+            const newEarning = {
+                id: this.tempEarningId,
+                earningType: '',
+                hours: [],
+                weekNumber: this.weekNumber
+            }
+            this.dispatchEvent(new CustomEvent('newearning', { detail: newEarning }));
+        }
         this.tempEarningId += 1;
-        this.earnings = [...this.earnings, {
-            Id: this.tempEarningId,
-            earningType: '',
-            hours: []
-        }];
     }
 
     changeValue(event) {
