@@ -65,7 +65,7 @@ public with sharing class TimesheetDataService {
                 List<Object> hours = (List<Object>) earning.get('hours');
                 String earningType = (String) earning.get('earningType');
                 String weekNumber = (String) String.valueOf(earning.get('weekNumber'));
-                boolean deleteFlag = (Boolean) earning.get(deleteFlag);
+                boolean deleteFlag = (Boolean) earning.get('deleteFlag');
 
                 if(hours.size() > 0) {
                     if(!deleteFlag) {
@@ -81,7 +81,7 @@ public with sharing class TimesheetDataService {
                                     Earning_Type__c = earningType,
                                     Timesheet__c = id
                                 );
-                                timesheetDaysData.add(updateDay);
+                                timesheetDaysDataUpsert.add(updateDay);
                             } else {
                                 Timesheet_Day__c newDay = new Timesheet_Day__c(
                                     Name = timesheetDay.Name,
@@ -92,7 +92,7 @@ public with sharing class TimesheetDataService {
                                     Week_Number__c = weekNumber,
                                     Timesheet__c = id
                                 );
-                                timesheetDaysData.add(newDay);
+                                timesheetDaysDataUpsert.add(newDay);
                             }
                         }
                     } else {
