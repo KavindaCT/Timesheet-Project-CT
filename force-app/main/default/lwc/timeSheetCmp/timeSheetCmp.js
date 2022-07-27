@@ -11,7 +11,7 @@ import uId from '@salesforce/user/Id';
 import { getRecord } from 'lightning/uiRecordApi';
 
 const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD];
-const STATUS = ['Submitted', 'Approved' , 'Rejected'];
+const STATUS = ['Submitted', 'Approved', 'Rejected'];
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
@@ -20,7 +20,7 @@ export default class TimeSheetCmp extends LightningElement {
     openModal = false;
     currentRecordId;
     @track timesheetDays;
-    timesheetDaysPerWeek;
+    @track timesheetDaysPerWeek;
     availableApprovers = [];
     currentUserId = uId;
     approverId;
@@ -28,6 +28,7 @@ export default class TimeSheetCmp extends LightningElement {
     isLoading = true;
     readOnly = false;
     wiredTimesheetData;
+    wiredTimesheetDaysData;
     timesheetBasicData;
     timesheetStatus;
     monthlyTotal = 0;
@@ -40,7 +41,7 @@ export default class TimeSheetCmp extends LightningElement {
         if (data) {
             this.timesheetBasicData = data;
             // if (this.timesheetBasicData.fields.Status__c.value === 'Submitted' || this.timesheetBasicData.fields.Status__c.value === 'Approved') {
-            if(STATUS.includes(this.timesheetBasicData.fields.Status__c.value)) {
+            if (STATUS.includes(this.timesheetBasicData.fields.Status__c.value)) {
                 this.readOnly = true;
             } else {
                 this.readOnly = false;
@@ -53,7 +54,10 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     @wire(getTimesheetDays, { timesheetId: '$timesheetId', currentUser: '$currentUserId' })
-    wiredTimesheetDays({ error, data }) {
+    wiredTimesheetDays(results) {
+        this.wiredTimesheetDaysData = results;
+
+        const { error, data } = results;
         if (data) {
             this.timesheetDays = data;
             // console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
@@ -145,7 +149,24 @@ export default class TimeSheetCmp extends LightningElement {
         this.activeWeekNumber = event.detail.weekNumber + 1;
         if (this.timesheetDays) {
             this.timesheetDaysPerWeek = [];
-            this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === event.detail.weekNumber + 1);
+            let daysPerWeek = this.timesheetDays.filter(day => day.weekNumber === event.detail.weekNumber + 1 && !day.deleteFlag);
+
+            if (daysPerWeek.length > 0) {
+                this.timesheetDaysPerWeek = daysPerWeek;
+            } else {
+                let deletedDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === event.detail.weekNumber + 1);
+                const lastIndex = deletedDaysPerWeek.length - 1;
+
+                let newDummyDay = {
+                    id: parseInt(deletedDaysPerWeek[lastIndex].id, 10) + 1,
+                    earningType: '',
+                    hours: [],
+                    weekNumber: this.activeWeekNumber,
+                    deleteFlag: false
+                }
+                this.timesheetDaysPerWeek.push(newDummyDay);
+                this.timesheetDays.push(newDummyDay);
+            }
         }
     }
 
@@ -168,6 +189,7 @@ export default class TimeSheetCmp extends LightningElement {
                     );
                     this.openModal = false;
                     refreshApex(this.wiredTimesheetData);
+                    refreshApex(this.wiredTimesheetDaysData);
                     this.isLoading = false;
                 }).catch(error => {
                     console.log(error);
@@ -212,7 +234,7 @@ export default class TimeSheetCmp extends LightningElement {
         var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
         const earningId = event.detail.id;
 
-        if(earningId !== null) {
+        if (earningId !== null) {
             let index = this.timesheetDays.findIndex(earning => earning.id === earningId);
             newTimesheetDays[index].earningType = event.detail.earningType;
         }
@@ -230,6 +252,7 @@ export default class TimeSheetCmp extends LightningElement {
                 })
             );
             refreshApex(this.wiredTimesheetData);
+            refreshApex(this.wiredTimesheetDaysData);
         }).catch(error => {
             console.log(error);
             this.dispatchEvent(
@@ -242,7 +265,38 @@ export default class TimeSheetCmp extends LightningElement {
         });
     }
 
-    hideModalBox(){
+    handleAddNewEarning(event) {
+        var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+        if (event) {
+            newTimesheetDays.push(event.detail);
+            this.timesheetDaysPerWeek.push(event.detail);
+        }
+        this.timesheetDays = newTimesheetDays;
+    }
+
+    handleRemoveEarning(event) {
+        var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+
+        if (event) {
+            console.log('Delete');
+            const id = event.detail.id;
+            let index = this.timesheetDays.findIndex(earning => earning.id === id);
+            console.log(newTimesheetDays[index]);
+
+            if (newTimesheetDays[index].hours.length > 0) {
+                newTimesheetDays[index].deleteFlag = true;
+            } else {
+                newTimesheetDays.splice(index, 1);
+            }
+            let perWeekIndex = this.timesheetDaysPerWeek.findIndex(earning => earning.id === id);
+            this.timesheetDaysPerWeek.splice(perWeekIndex, 1);
+        }
+        this.timesheetDays = newTimesheetDays;
+        console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
+        console.log(JSON.parse(JSON.stringify(this.timesheetDaysPerWeek)));
+    }
+
+    hideModalBox() {
         this.openModal = false;
     }
 

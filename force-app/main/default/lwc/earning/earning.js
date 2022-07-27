@@ -50,7 +50,10 @@ export default class Earning extends LightningElement {
 
     get earningTypes() {
         return [
-            { label: 'Ordinary Hours', value: 'Ordinary Hours' }
+            { label: 'Ordinary Hours', value: 'Ordinary Hours' },
+            { label: 'Full Day Leave', value: 'Full Day Leave' },
+            { label: 'Half Day Leave', value: 'Half Day Leave' },
+            { label: 'Sick Leave', value: 'Sick Leave' }
         ];
     }
 
@@ -104,7 +107,7 @@ export default class Earning extends LightningElement {
     }
 
     handleRemoveEarning() {
-        const removeEarning = new CustomEvent('remove', { detail: { Id: this.earning.Id } });
+        const removeEarning = new CustomEvent('remove', { detail: { id: this.earning.id } });
         this.dispatchEvent(removeEarning);
     }
 }
