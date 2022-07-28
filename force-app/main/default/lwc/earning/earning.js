@@ -102,7 +102,7 @@ export default class Earning extends LightningElement {
     handleEarningChange(event) {
         const value = event.target.value;
         if(value !== null && value !== undefined) {
-            this.dispatchEvent(new CustomEvent('changeearning', { detail: { earningType: this.earningType, id: this.earning.id }}));
+            this.dispatchEvent(new CustomEvent('changeearning', { detail: { earningType: value, id: this.earning.id }}));
         }
     }
 
