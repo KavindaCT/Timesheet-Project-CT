@@ -206,27 +206,35 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleChangeValue(event) {
+        console.log('vvv');
         var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+        // console.log(newTimesheetDays);
         const dayId = event.detail.dayId;
         this.monthlyTotal = '';
 
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
-
-        if (dayId !== '') {
+        console.log(index);
+        // if (dayId !== '') 
             let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
-        } else {
+            console.log('if');
+
+        //  else {
             let date = new Date(`${event.detail.date}${this.timePeriod.substring(4, 9)}`);
+            console.log('else');
 
             newTimesheetDays[index].hours.push({
-                name: event.detail.name + '-' + this.timePeriod.substring(0, 9) + '-' + newTimesheetDays[index].earningType,
+                name: event.detail.name + ' ' + this.timePeriod.substring(0, 9) + '-' + newTimesheetDays[index].earningType,
                 hours: event.detail.value,
                 day: event.detail.day,
                 timesheet_date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+   
             });
-            // console.log(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-        }
 
+            // console.log(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+        // }
+        console.log(newTimesheetDays);
+        
         this.timesheetDays = newTimesheetDays;
     }
 
@@ -238,7 +246,6 @@ export default class TimeSheetCmp extends LightningElement {
             let index = this.timesheetDays.findIndex(earning => earning.id === earningId);
             newTimesheetDays[index].earningType = event.detail.earningType;
         }
-
         this.timesheetDays = newTimesheetDays;
     }
 
@@ -253,6 +260,7 @@ export default class TimeSheetCmp extends LightningElement {
             );
             refreshApex(this.wiredTimesheetData);
             refreshApex(this.wiredTimesheetDaysData);
+            refreshApex(this.timesheetDays);
         }).catch(error => {
             console.log(error);
             this.dispatchEvent(
