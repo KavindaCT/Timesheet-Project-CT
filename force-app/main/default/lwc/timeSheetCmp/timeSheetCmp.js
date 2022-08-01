@@ -11,7 +11,7 @@ import uId from '@salesforce/user/Id';
 import { getRecord } from 'lightning/uiRecordApi';
 
 const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD];
-const STATUS = ['Submitted', 'Approved', 'Rejected'];
+const STATUS = ['Submitted', 'Approved'];
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
