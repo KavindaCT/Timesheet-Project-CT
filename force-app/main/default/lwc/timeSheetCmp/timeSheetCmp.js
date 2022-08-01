@@ -219,7 +219,7 @@ export default class TimeSheetCmp extends LightningElement {
             let date = new Date(`${event.detail.date}${this.timePeriod.substring(4, 9)}`);
 
             newTimesheetDays[index].hours.push({
-                name: event.detail.name + '-' + this.timePeriod.substring(0, 9) + '-' + newTimesheetDays[index].earningType,
+                name: event.detail.name + ' ' + this.timePeriod.substring(0, 9) + '-' + newTimesheetDays[index].earningType,
                 hours: event.detail.value,
                 day: event.detail.day,
                 timesheet_date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
