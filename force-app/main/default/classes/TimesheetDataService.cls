@@ -34,7 +34,7 @@ public with sharing class TimesheetDataService {
         List<TimesheetEarning.earningsWrapper> earnings = new List<TimesheetEarning.earningsWrapper>();
         try {
             List<Timesheet_Day__c> timesheetDays =  [
-                SELECT Id, Name, Hours__c, Week_Number__c, Earning_Type__c, Day__c, Timesheet_Date__c
+                SELECT Id, Name, Hours__c, Week_Number__c, Earning_Type__c, Day__c, Timesheet_Date__c, Timesheet_month__c
                 FROM Timesheet_Day__c
                 WHERE Timesheet__c = :timesheetId AND CreatedById = :currentUser
             ];
@@ -45,7 +45,7 @@ public with sharing class TimesheetDataService {
                     {Id: '', Name: '21-2', Hours__c: 9, Week_Number__c: 4, Day__c: 'Wed', Earning_Type__c: 'overtime'}
                ]
             */
-            
+            System.debug('results'+timesheetDays);
             earnings =  TimesheetEarning.getEarnings(timesheetDays);
         } catch (Exception e) {
             System.debug('Exception: ' + e.getMessage());

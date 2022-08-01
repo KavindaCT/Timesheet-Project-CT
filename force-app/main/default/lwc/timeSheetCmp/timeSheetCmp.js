@@ -60,7 +60,7 @@ export default class TimeSheetCmp extends LightningElement {
         const { error, data } = results;
         if (data) {
             this.timesheetDays = data;
-            // console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
+            console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
             this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === this.activeWeekNumber);
             // console.log(this.timesheetDaysPerWeek);
         } else if (error) {
@@ -211,23 +211,27 @@ export default class TimeSheetCmp extends LightningElement {
         this.monthlyTotal = '';
 
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
+        console.log('period'+this.timePeriod);
+        console.log('dayId'+dayId);
 
         if (dayId !== '') {
+            console.log('if');
             let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
-        } else {
-            let date = new Date(`${event.detail.date}${this.timePeriod.substring(4, 9)}`);
 
+        } else {
+            console.log('else');
+            let date = new Date(`${event.detail.date}${this.timePeriod.substring(0, 11)}`);
+            console.log('date' +date);
             newTimesheetDays[index].hours.push({
-                name: event.detail.name + ' ' + this.timePeriod.substring(0, 9) + '-' + newTimesheetDays[index].earningType,
+                name: event.detail.name + ' ' + this.timePeriod.substring(0, 11) + '-' + newTimesheetDays[index].earningType,
                 hours: event.detail.value,
                 day: event.detail.day,
                 timesheet_date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
             });
-            // console.log(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
         }
-
         this.timesheetDays = newTimesheetDays;
+      
     }
 
     handleEarningTypeChange(event) {
@@ -243,8 +247,9 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleClickDraft() {
+        console.log('draft '+JSON.stringify(this.timesheetDays));
+
         insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
-            console.log(result);
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success! Your hours successfully saved',

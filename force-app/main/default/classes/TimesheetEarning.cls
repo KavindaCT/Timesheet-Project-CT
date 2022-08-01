@@ -84,6 +84,7 @@ public with sharing class TimesheetEarning {
                             newEarningHours1.Name = day1.Name;
                             newEarningHours1.day = day1.Day__c;
                             newEarningHours1.hours = day1.Hours__c;
+                            newEarningHours1.timesheet_month = day1.Timesheet_month__c;
                             // newEarningHours1.timesheet_date = day1.Timesheet_Date__c;
                             earningHoursFor1.add(newEarningHours1);
                         }
@@ -109,6 +110,7 @@ public with sharing class TimesheetEarning {
                         newEarningHours2.day = day2.Day__c;
                         // newEarningHours2.timesheet_date = day2.Timesheet_Date__c;
                         newEarningHours2.hours = day2.Hours__c;
+                        newEarningHours2.timesheet_month = day2.Timesheet_month__c;
                         earningHoursFor2.add(newEarningHours2);
                     }
                 }
@@ -133,6 +135,7 @@ public with sharing class TimesheetEarning {
                         newEarningHours3.day = day3.Day__c;
                         // newEarningHours3.timesheet_date = day3.Timesheet_Date__c;
                         newEarningHours3.hours = day3.Hours__c;
+                        newEarningHours3.timesheet_month = day3.Timesheet_month__c;
                         earningHoursFor3.add(newEarningHours3);
                     }
                 }
@@ -157,6 +160,7 @@ public with sharing class TimesheetEarning {
                         newEarningHours4.day = day4.Day__c;
                         // newEarningHours4.timesheet_date = day4.Timesheet_Date__c;
                         newEarningHours4.hours = day4.Hours__c;
+                        newEarningHours4.timesheet_month = day4.Timesheet_month__c;
                         earningHoursFor4.add(newEarningHours4);
                     }
                 }
@@ -181,6 +185,7 @@ public with sharing class TimesheetEarning {
                         newEarningHours5.day = day5.Day__c;
                         // newEarningHours5.timesheet_date = day5.Timesheet_Date__c;
                         newEarningHours5.hours = day5.Hours__c;
+                        newEarningHours5.timesheet_month = day5.Timesheet_month__c;
                         earningHoursFor5.add(newEarningHours5);
                     }
                 }
@@ -224,5 +229,7 @@ public with sharing class TimesheetEarning {
         public Date timesheet_date;
         @AuraEnabled
         public Decimal hours;
+        @AuraEnabled
+        public String timesheet_month;
     }
 }
