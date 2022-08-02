@@ -210,7 +210,7 @@ export default class TimeSheetCmp extends LightningElement {
         this.monthlyTotal = '';
 
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
-       
+        console.log(event.detail.value)
 
         if (dayId !== '') {
             let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
