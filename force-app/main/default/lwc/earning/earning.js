@@ -67,24 +67,27 @@ export default class Earning extends LightningElement {
     handleChange(event) {
         const id = event.currentTarget.dataset.id;
         const value = event.target.value;
-
+        
+        console.log(value);
         var newTotal = 0;
         for (let i = 1; i < 6; i++) {
-            if (!this.weekDays[i - 1].disabled) {
+            if (!this.weekDays[i - 1].disabled ) {
                 newTotal += parseFloat(this.template.querySelector(`[data-id="${i}"]`).value);
             }
         }
 
-        if (value > 9) {
-            this.error = true;
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Daily Working Hours limit exceeded',
-                    message: 'Please review your working hours',
-                    variant: 'error',
-                }),
-            );
-        } else if(value) {
+        // if (value > 9) {
+        //     this.error = true;
+        //     this.dispatchEvent(
+        //         new ShowToastEvent({
+        //             title: 'Daily Working Hours limit exceeded',
+        //             message: 'Please review your working hours',
+        //             variant: 'error',
+        //         }),
+        //     );
+        // } 
+        // else
+         if(value) {
             this.error = false;
             let relatedDay = this.earning.hours.find(day => day.day.charAt(0) === id);
 

@@ -60,7 +60,6 @@ export default class TimeSheetCmp extends LightningElement {
         const { error, data } = results;
         if (data) {
             this.timesheetDays = data;
-            console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
             this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === this.activeWeekNumber);
             // console.log(this.timesheetDaysPerWeek);
         } else if (error) {
@@ -211,18 +210,14 @@ export default class TimeSheetCmp extends LightningElement {
         this.monthlyTotal = '';
 
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
-        console.log('period'+this.timePeriod);
-        console.log('dayId'+dayId);
+       
 
         if (dayId !== '') {
-            console.log('if');
             let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
 
         } else {
-            console.log('else');
             let date = new Date(`${event.detail.date}${this.timePeriod.substring(0, 11)}`);
-            console.log('date' +date);
             newTimesheetDays[index].hours.push({
                 name: event.detail.name + ' ' + this.timePeriod.substring(0, 11) + '-' + newTimesheetDays[index].earningType,
                 hours: event.detail.value,
@@ -247,7 +242,6 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleClickDraft() {
-        console.log('draft '+JSON.stringify(this.timesheetDays));
 
         insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
             this.dispatchEvent(
@@ -263,7 +257,7 @@ export default class TimeSheetCmp extends LightningElement {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Something went wrong!',
-                    message: 'Your changed not saved, Please try again later',
+                    message: 'Check whether you have reached daily working hours goal',
                     variant: 'error'
                 })
             );
@@ -297,8 +291,8 @@ export default class TimeSheetCmp extends LightningElement {
             this.timesheetDaysPerWeek.splice(perWeekIndex, 1);
         }
         this.timesheetDays = newTimesheetDays;
-        console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
-        console.log(JSON.parse(JSON.stringify(this.timesheetDaysPerWeek)));
+        // console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
+        // console.log(JSON.parse(JSON.stringify(this.timesheetDaysPerWeek)));
     }
 
     hideModalBox() {

@@ -22,7 +22,6 @@ export default class HeadingCmp extends LightningElement {
            const firstDate = new Date('01 ' + this.timePeriod);
            const lastDate = (new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0));
            
-            console.log('timeperiod '+this.timePeriod);
           
 
             var weekNumber = 0;
@@ -85,7 +84,6 @@ export default class HeadingCmp extends LightningElement {
                     weekStart: weekStart.toDateString(),
                     weekEnding: weekEnd.toDateString()
                 });
-                console.log('weeks '+JSON.stringify(this.weeks));
                 weekStart.setDate(weekEnd.getDate() + 3);
                 weekNumber += 1;
             }
