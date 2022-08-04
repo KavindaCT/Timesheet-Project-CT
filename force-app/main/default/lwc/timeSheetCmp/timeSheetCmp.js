@@ -11,7 +11,7 @@ import uId from '@salesforce/user/Id';
 import { getRecord } from 'lightning/uiRecordApi';
 
 const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD];
-const STATUS = ['Submitted', 'Approved', 'Rejected'];
+const STATUS = ['Submitted', 'Approved'];
 export default class TimeSheetCmp extends LightningElement {
     @api timePeriod;
     @api timesheetId;
@@ -60,7 +60,6 @@ export default class TimeSheetCmp extends LightningElement {
         const { error, data } = results;
         if (data) {
             this.timesheetDays = data;
-            // console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
             this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === this.activeWeekNumber);
             // console.log(this.timesheetDaysPerWeek);
         } else if (error) {
@@ -205,29 +204,63 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
+    // handleChangeValue(event) {
+    //     var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+    //     const dayId = event.detail.dayId;
+    //     this.monthlyTotal = '';
+
+    //     let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
+    //     console.log(event.detail.value)
+
+    //     if (dayId !== '') {
+    //         let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
+    //         newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
+
+    //     } else {
+    //         const date = new Date(`${event.detail.date}${this.timePeriod.substring(0, 11)}`);
+    //         const timesheetDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    //         let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.timesheet_date === timesheetDate);
+    //         if(hoursindex != -1){
+    //             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
+    //         }else{
+    //             newTimesheetDays[index].hours.push({
+    //                 name: event.detail.name + ' ' + this.timePeriod.substring(0, 11) + '-' + newTimesheetDays[index].earningType,
+    //                 hours: event.detail.value,
+    //                 day: event.detail.day,
+    //                 timesheet_date: timesheetDate
+    //             });
+    //         }
+           
+    //     }
+    //     this.timesheetDays = newTimesheetDays;
+      
+    // }
+
     handleChangeValue(event) {
         var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
         const dayId = event.detail.dayId;
         this.monthlyTotal = '';
 
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
-
         if (dayId !== '') {
             let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
         } else {
-            let date = new Date(`${event.detail.date}${this.timePeriod.substring(4, 9)}`);
-
-            newTimesheetDays[index].hours.push({
-                name: event.detail.name + ' ' + this.timePeriod.substring(0, 9) + '-' + newTimesheetDays[index].earningType,
-                hours: event.detail.value,
-                day: event.detail.day,
-                timesheet_date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-            });
-            // console.log(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
+            let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.day === event.detail.day);
+            if(hoursindex > -1){
+                newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;     
+            }else{
+                let date = new Date(`${event.detail.date}${this.timePeriod.substring(0, 11)}`);
+                newTimesheetDays[index].hours.push({
+                    name: event.detail.name + ' ' + this.timePeriod.substring(0, 11) + '-' + newTimesheetDays[index].earningType,
+                    hours: event.detail.value,
+                    day: event.detail.day,
+                    timesheet_date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+                });
+            }
         }
-
         this.timesheetDays = newTimesheetDays;
+      
     }
 
     handleEarningTypeChange(event) {
@@ -243,8 +276,8 @@ export default class TimeSheetCmp extends LightningElement {
     }
 
     handleClickDraft() {
+
         insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
-            console.log(result);
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Success! Your hours successfully saved',
@@ -254,11 +287,10 @@ export default class TimeSheetCmp extends LightningElement {
             refreshApex(this.wiredTimesheetData);
             refreshApex(this.wiredTimesheetDaysData);
         }).catch(error => {
-            console.log(error);
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Something went wrong!',
-                    message: 'Your changed not saved, Please try again later',
+                    message: 'Check whether you have reached daily working hours goal',
                     variant: 'error'
                 })
             );
@@ -292,8 +324,8 @@ export default class TimeSheetCmp extends LightningElement {
             this.timesheetDaysPerWeek.splice(perWeekIndex, 1);
         }
         this.timesheetDays = newTimesheetDays;
-        console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
-        console.log(JSON.parse(JSON.stringify(this.timesheetDaysPerWeek)));
+        // console.log(JSON.parse(JSON.stringify(this.timesheetDays)));
+        // console.log(JSON.parse(JSON.stringify(this.timesheetDaysPerWeek)));
     }
 
     hideModalBox() {

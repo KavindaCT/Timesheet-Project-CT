@@ -1,5 +1,8 @@
 import { LightningElement, api } from 'lwc';
 
+const MONTH = [
+    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+  ];
 export default class HeadingCmp extends LightningElement {
     @api timePeriod;
     weeks = []; // [{ weekEnding: '', weekStart: '', weekNumber: 0 }]
@@ -10,11 +13,17 @@ export default class HeadingCmp extends LightningElement {
     currentWeekNumber = 0;
     disablePreviousButton = true;
     disableNextButton = false;
+    // currentUserId = uId;
 
     connectedCallback() {
+        const currentDate = new Date();
+        this.timePeriod = MONTH[currentDate.getMonth()] + ' ' + currentDate.getFullYear(); // June 2022
         if (this.timePeriod) {
-            const firstDate = new Date('01 ' + this.timePeriod.substring(0, 9) + ' 00:00');
-            const lastDate = (new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0));
+           const firstDate = new Date('01 ' + this.timePeriod);
+           const lastDate = (new Date(firstDate.getFullYear(), firstDate.getMonth() + 1, 0));
+           
+          
+
             var weekNumber = 0;
             var weekStart = new Date(firstDate);
             var weekEnd = new Date(firstDate);
@@ -75,7 +84,6 @@ export default class HeadingCmp extends LightningElement {
                     weekStart: weekStart.toDateString(),
                     weekEnding: weekEnd.toDateString()
                 });
-
                 weekStart.setDate(weekEnd.getDate() + 3);
                 weekNumber += 1;
             }
@@ -87,6 +95,7 @@ export default class HeadingCmp extends LightningElement {
     handleSetWeek(weekNumber) {
         if (this.weeks.length > 0) {
             this.date = this.weeks[weekNumber].weekEnding;
+            // console.log('printing date '+this.date)
             this.changeWeekNumber(weekNumber);
         }
     }
