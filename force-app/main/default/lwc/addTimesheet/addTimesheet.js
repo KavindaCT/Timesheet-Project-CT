@@ -82,7 +82,14 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
             variant: 'error',
           }),
         );
-      });
+      }
+      )
+      .finally (() =>
+       {
+        const payload = { timesheetId: this.timeSheetId, timesheetName: timePeriod };
+        publish(this.messageContext, TimesheetMessageChannel, payload);
+       }
+      );
   }
 
   handlePeriodSelect(event) {
@@ -94,8 +101,6 @@ export default class AddTimesheet extends NavigationMixin(LightningElement) {
         publish(this.messageContext, TimesheetMessageChannel, payload);
       } else {
         this.createNewTimesheet(currentTimePeriod);
-        const payload = { timesheetId: this.timeSheetId, timesheetName: currentTimePeriod };
-        publish(this.messageContext, TimesheetMessageChannel, payload);
       }
       this.showSpinner = false;
     }).catch(error => {

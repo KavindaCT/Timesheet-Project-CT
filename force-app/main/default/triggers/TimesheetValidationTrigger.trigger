@@ -14,7 +14,7 @@ trigger TimesheetValidationTrigger on Timesheet_Day__c (after insert,after updat
           Date dates = (date) ag.get('Timesheet_Date__c');
           System.debug('sum'+ amount+'date'+ dates);
           
-            if(amount < 9){
+            if(amount < 9 && amount != 0){
                  t.addError('Daily Working hours goal not reached!'); 
             }
         }

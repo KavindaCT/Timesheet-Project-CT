@@ -125,7 +125,7 @@ export default class Earning extends LightningElement {
         const id = event.currentTarget.dataset.id;
         const value = event.target.value;
         
-        console.log('VALUE'+value);
+        // console.log('VALUE'+value);
         var newTotal = 0;
         for (let i = 1; i < 6; i++) {
             if (!this.weekDays[i - 1].disabled) {
