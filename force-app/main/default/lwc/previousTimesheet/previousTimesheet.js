@@ -1,8 +1,8 @@
 import { api, LightningElement } from 'lwc';
 
-const APPROVED_CLASS = 'slds-badge slds-theme_success slds-var-m-horizontal_medium';
-const REJECTED_CLASS = 'slds-badge slds-theme_error slds-var-m-horizontal_medium';
-const SUBMITTED_CLASS = 'slds-badge slds-theme_warning slds-var-m-horizontal_medium';
+const APPROVED_CLASS = 'slds-badge slds-theme_success slds-var-p-horizontal_medium slds-text-heading_small';
+const REJECTED_CLASS = 'slds-badge slds-theme_error slds-var-p-horizontal_medium slds-text-heading_small';
+const SUBMITTED_CLASS = 'slds-badge slds-theme_warning slds-var-p-horizontal_medium slds-text-heading_small';
 export default class PreviousTimesheet extends LightningElement {
     @api timesheet;
 
