@@ -109,6 +109,7 @@ public with sharing class TimesheetDataService {
 
                             if (timesheetDay.id != null) {
                                 // System.debug(Timesheet_Day__c);
+                                // System.debug('update '+updateDay);
                                 Timesheet_Day__c updateDay = new Timesheet_Day__c(
                                     Id = (Id) timesheetDay.id,
                                     Name = tsname,
@@ -116,9 +117,9 @@ public with sharing class TimesheetDataService {
                                     Earning_Type__c = earningType,
                                     Timesheet__c = id
                                 );
-                                System.debug(updateDay);
                                 timesheetDaysDataUpsert.add(updateDay);
                             } else {
+                                // System.debug('new '+newDay);
                                 Timesheet_Day__c newDay = new Timesheet_Day__c(
                                     Name = tsname,
                                     Hours__c = timesheetDay.hours,
@@ -129,6 +130,8 @@ public with sharing class TimesheetDataService {
                                     Timesheet__c = id
                                 );
                                 timesheetDaysDataUpsert.add(newDay);
+                                // System.debug('new '+newDay);
+
                             }
                             
 
@@ -152,7 +155,7 @@ public with sharing class TimesheetDataService {
                     }
                 }
             }
-            System.debug(timesheetDaysDataUpsert);
+            // System.debug(timesheetDaysDataUpsert);
             upsert timesheetDaysDataUpsert;
             delete timesheetDaysDataDelete;
         } catch (Exception e) {

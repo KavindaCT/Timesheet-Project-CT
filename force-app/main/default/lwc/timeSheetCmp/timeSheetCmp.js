@@ -204,26 +204,60 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
+    // handleChangeValue(event) {
+    //     var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+    //     const dayId = event.detail.dayId;
+    //     this.monthlyTotal = '';
+
+    //     let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
+    //     console.log(event.detail.value)
+
+    //     if (dayId !== '') {
+    //         let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
+    //         newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
+
+    //     } else {
+    //         const date = new Date(`${event.detail.date}${this.timePeriod.substring(0, 11)}`);
+    //         const timesheetDate = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    //         let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.timesheet_date === timesheetDate);
+    //         if(hoursindex != -1){
+    //             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
+    //         }else{
+    //             newTimesheetDays[index].hours.push({
+    //                 name: event.detail.name + ' ' + this.timePeriod.substring(0, 11) + '-' + newTimesheetDays[index].earningType,
+    //                 hours: event.detail.value,
+    //                 day: event.detail.day,
+    //                 timesheet_date: timesheetDate
+    //             });
+    //         }
+           
+    //     }
+    //     this.timesheetDays = newTimesheetDays;
+      
+    // }
+
     handleChangeValue(event) {
         var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
         const dayId = event.detail.dayId;
         this.monthlyTotal = '';
 
         let index = this.timesheetDays.findIndex(earning => earning.id === event.detail.earningsId);
-        console.log(event.detail.value)
-
         if (dayId !== '') {
             let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.id === dayId);
             newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
-
         } else {
-            let date = new Date(`${event.detail.date}${this.timePeriod.substring(0, 11)}`);
-            newTimesheetDays[index].hours.push({
-                name: event.detail.name + ' ' + this.timePeriod.substring(0, 11) + '-' + newTimesheetDays[index].earningType,
-                hours: event.detail.value,
-                day: event.detail.day,
-                timesheet_date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-            });
+            let hoursindex = this.timesheetDays[index].hours.findIndex(day => day.day === event.detail.day);
+            if(hoursindex > -1){
+                newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;     
+            }else{
+                let date = new Date(`${event.detail.date}${this.timePeriod.substring(0, 11)}`);
+                newTimesheetDays[index].hours.push({
+                    name: event.detail.name + ' ' + this.timePeriod.substring(0, 11) + '-' + newTimesheetDays[index].earningType,
+                    hours: event.detail.value,
+                    day: event.detail.day,
+                    timesheet_date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+                });
+            }
         }
         this.timesheetDays = newTimesheetDays;
       
@@ -253,7 +287,6 @@ export default class TimeSheetCmp extends LightningElement {
             refreshApex(this.wiredTimesheetData);
             refreshApex(this.wiredTimesheetDaysData);
         }).catch(error => {
-            console.log(error);
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Something went wrong!',

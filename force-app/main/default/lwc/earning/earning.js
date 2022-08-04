@@ -64,6 +64,63 @@ export default class Earning extends LightningElement {
         return this.error ? 'slds-text-color_error' : 'slds-text-color_default';
     }
 
+
+    // handleChange(event) {
+    //     const id = event.currentTarget.dataset.id;
+    //     const value = event.target.value;
+        
+    //     console.log('VALUE'+value);
+    //     var newTotal = 0;
+    //     for (let i = 1; i < 6; i++) {
+    //         if (!this.weekDays[i - 1].disabled) {
+    //             newTotal += parseFloat(this.template.querySelector(`[data-id="${i}"]`).value);
+    //         }
+    //     }
+
+    //     // if (value > 9) {
+    //     //     this.error = true;
+    //     //     this.dispatchEvent(
+    //     //         new ShowToastEvent({
+    //     //             title: 'Daily Working Hours limit exceeded',
+    //     //             message: 'Please review your working hours',
+    //     //             variant: 'error',
+    //     //         }),
+    //     //     );
+    //     // } 
+    //     // else
+    //     //  if(value) {
+    //         // id = id + 1; 
+    //         this.error = false;
+    //         let relatedDay = this.earning.hours.find(day => day.day.charAt(0) === id);
+    //         if(value){
+    //             console.log('test')
+    //             value == 0;
+    //             console.log('test2')
+
+    //         }
+    //         console.log('t1 '+value);
+    //         var hValue = JSON.stringify(relatedDay);
+    //         console.log('t2 '+hValue);
+    //         if(hValue){
+
+    //         var hoursValue = JSON.parse(hValue);
+    //         console.log('t3 '+hoursValue);
+    //         hoursValue.hours = value; 
+    //         console.log('latest'+JSON.stringify(relatedDay));
+    //         console.log('hoursvalue '+hoursValue.hours);
+    //         }else{
+    //             hValue = 0;
+    //         }
+    //         if(hoursValue) {
+    //             let dayId = hoursValue.id;
+    //             console.log('aa'+JSON.stringify(hoursValue));
+    //             this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: dayId, value: hoursValue.hours } }));
+    //         } else {
+    //             this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: '', day: id, value: value } }));
+    //         }
+    //     }
+
+
     handleChange(event) {
         const id = event.currentTarget.dataset.id;
         const value = event.target.value;
@@ -91,36 +148,61 @@ export default class Earning extends LightningElement {
             // id = id + 1; 
             this.error = false;
             let relatedDay = this.earning.hours.find(day => day.day.charAt(0) === id);
-            if(value){
-                console.log('test')
-                value == 0;
-                console.log('test2')
-
-            }
-            console.log('t1 '+value);
             var hValue = JSON.stringify(relatedDay);
-            console.log('t2 '+hValue);
-            if(hValue){
 
+            if(hValue!== undefined){
+ 
             var hoursValue = JSON.parse(hValue);
-            console.log('t3 '+hoursValue);
             hoursValue.hours = value; 
-            console.log('latest'+JSON.stringify(relatedDay));
-            console.log('hoursvalue '+hoursValue.hours);
             }else{
                 hValue = 0;
             }
-            if(hoursValue) {
+            if(hValue != 0 && hoursValue.id != undefined) {
+            
                 let dayId = hoursValue.id;
-                console.log('aa'+JSON.stringify(hoursValue));
                 this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: dayId, value: hoursValue.hours } }));
             } else {
                 this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: '', day: id, value: value } }));
             }
-        // }
 
-        this.template.querySelector('[data-id="total-hours"]').value = newTotal;
-    }
+         }
+
+    //     this.template.querySelector('[data-id="total-hours"]').value = newTotal;
+    // }
+    //  handleChange(event) {
+    //     const id = event.currentTarget.dataset.id;
+    //     const value = event.target.value;
+
+    //     var newTotal = 0;
+    //     for (let i = 1; i < 6; i++) {
+    //         if (!this.weekDays[i - 1].disabled) {
+    //             newTotal += parseFloat(this.template.querySelector(`[data-id="${i}"]`).value);
+    //         }
+    //     }
+
+    //     if (value > 9) {
+    //         this.error = true;
+    //         this.dispatchEvent(
+    //             new ShowToastEvent({
+    //                 title: 'Daily Working Hours limit exceeded',
+    //                 message: 'Please review your working hours',
+    //                 variant: 'error',
+    //             }),
+    //         );
+    //     } else if(value) {
+    //         this.error = false;
+    //         let relatedDay = this.earning.hours.find(day => day.day.charAt(0) === id);
+
+    //         if(relatedDay) {
+    //             let dayId = relatedDay.id;
+    //             this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: dayId, value: value } }));
+    //         } else {
+    //             this.dispatchEvent(new CustomEvent('changevalue', { detail: { earningsId: this.earning.id, dayId: '', day: id, value: value } }));
+    //         }
+    //     }
+
+    //     this.template.querySelector('[data-id="total-hours"]').value = newTotal;
+    // }
 
     handleEarningChange(event) {
         const value = event.target.value;
