@@ -5,7 +5,7 @@ public with sharing class TimesheetDataService {
         try {
             previousTimesheets = [
                 SELECT ID, Name, Status__c FROM Timesheet__c
-                WHERE CreatedById = :currentUserId
+                WHERE CreatedById = :currentUserId ORDER BY CreatedDate DESC
                 LIMIT 3
             ];
         } catch (Exception e) {
@@ -28,6 +28,92 @@ public with sharing class TimesheetDataService {
             return null;
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Timesheet_day__c> getTimesheetId(String recordId) {
+        
+        try {
+            System.debug('recordid'+recordId);
+
+                ProcessInstanceWorkitem ProcessInstanceWorkitemIds = [SELECT ProcessInstanceId from ProcessInstanceWorkitem where Id= :recordId];
+                Id ProcessInstanceWorkitemId = ProcessInstanceWorkitemIds.ProcessInstanceId;
+
+                ProcessInstance ProcessInstanceIds = [SELECT TargetObjectId FROM ProcessInstance where (Id = :ProcessInstanceWorkitemId  AND TargetObject.Type = 'Timesheet__c')];
+                Id ProcessInstanceId = ProcessInstanceIds.TargetObjectId;
+
+                List<Timesheet_day__c> timesheetDayData = [
+                    SELECT ID, name, Earning_Type__c, Timesheet_Date__c, Timesheet_month__c,Hours__c, Timesheet__r.name FROM Timesheet_day__c WHERE Timesheet__c = :ProcessInstanceId
+                    ];
+
+
+                System.debug('ProcessInstanceId '+ProcessInstanceId);
+                
+                //SELECT ProcessInstanceId from ProcessInstanceWorkitem where Id= '04i8d000000fJdbAAE'
+                //SELECT Id, TargetObjectId FROM ProcessInstance where (Id = '04g8d000001xlzNAAQ-ProcessInstanceId'  AND TargetObject.Type = 'Timesheet__c')
+                //SELECT Id, Name FROM Timesheet__c WHERE Id = 'TargetObjectId'
+                //SELECT Name FROM Timesheet_day__c WHERE Timesheet__r.name= 'August 2022 - Vidura Jayasinghe'
+            System.debug('tiesheetdata'+timesheetDayData);
+            return timesheetDayData;
+
+            } 
+            catch (Exception e) {
+                    //System.debug('Exception: ' + e.getMessage());
+                    return null;
+                }
+            }
+
+
+            @AuraEnabled(cacheable=true)
+            public static Map<Id,Id> getTimesheetIdFromWorkitemId(String recordId) {
+                Map<Id,Id> timesheetWithUser = new Map<Id,Id>();
+                try {
+                    System.debug('recordid'+recordId);
+        
+                        ProcessInstanceWorkitem ProcessInstanceWorkitemIds = [SELECT ProcessInstanceId, CreatedById from ProcessInstanceWorkitem where Id= :recordId];
+                        Id ProcessInstanceWorkitemId = ProcessInstanceWorkitemIds.ProcessInstanceId;
+                        Id userId = ProcessInstanceWorkitemIds.CreatedById;
+        
+                        ProcessInstance ProcessInstanceIds = [SELECT TargetObjectId FROM ProcessInstance where (Id = :ProcessInstanceWorkitemId  AND TargetObject.Type = 'Timesheet__c')];
+                        Id ProcessInstanceId = ProcessInstanceIds.TargetObjectId;
+        
+                        timesheetWithUser.put(ProcessInstanceId, userId);
+        
+        
+                        System.debug('ProcessInstanceId '+ProcessInstanceId);
+                        
+                        //SELECT ProcessInstanceId from ProcessInstanceWorkitem where Id= '04i8d000000fJdbAAE'
+                        //SELECT Id, TargetObjectId FROM ProcessInstance where (Id = '04g8d000001xlzNAAQ-ProcessInstanceId'  AND TargetObject.Type = 'Timesheet__c')
+                        //SELECT Id, Name FROM Timesheet__c WHERE Id = 'TargetObjectId'
+                        //SELECT Name FROM Timesheet_day__c WHERE Timesheet__r.name= 'August 2022 - Vidura Jayasinghe'
+                 
+                    return timesheetWithUser;
+        
+                    } 
+                    catch (Exception e) {
+                            //System.debug('Exception: ' + e.getMessage());
+                            return null;
+                        }
+                    }
+        
+    // @AuraEnabled
+    // public static List<ProcessInstance> ProcessInstanceId(String approvalId) {
+    //     try {
+    //         // String recordIds = [
+    //         //     Select ProcessInstanceId FROM ProcessInstanceWorkitem where Id = : approvalId
+    //         // ].ProcessInstanceId;
+
+    //         List<ProcessInstance> recordIdss = [
+    //             Select Id, TargetObjectId FROM ProcessInstance where Id =: approvalId
+    //         ];
+    //         System.debug(recordIds);
+    //         return recordIds;
+
+    //     }catch (Exception e) {
+    //         System.debug('Exception: ' + e.getMessage());
+    //         return null;
+    //     }
+    // }
+        
 
     @AuraEnabled(cacheable=true)
     public static List<TimesheetEarning.earningsWrapper> getTimesheetDays(String timesheetId, String currentUser){

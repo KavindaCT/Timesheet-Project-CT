@@ -1,0 +1,19 @@
+<template>
+    <lightning-card>
+        <h1 slot="title">TimeSheet for {timePeriod}</h1>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12">
+            </lightning-layout-item>
+            <lightning-layout-item size="12" class="slds-var-m-bottom_small">
+                <c-heading-cmp time-period={timePeriod} onchangeweek={changeWeek} timesheet-status={timesheetStatus}
+                    monthly-total={monthlyTotal}></c-heading-cmp>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" if:true={activeWeek} class="">
+                <c-week current-week={activeWeek} earning-data={timesheetDaysPerWeek} onchangevalue={handleChangeValue}
+                    onchangeearningtype={handleEarningTypeChange} onnewearning={handleAddNewEarning}
+                    onremoveearning={handleRemoveEarning} read-only={readOnly}></c-week>
+            </lightning-layout-item>
+        </lightning-layout>
+
+    </lightning-card>
+</template>
