@@ -117,6 +117,8 @@ export default class TimeSheetCmp extends LightningElement {
         insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
             console.log(result);
             this.isLoading = false;
+            refreshApex(this.wiredTimesheetData);
+            refreshApex(this.wiredTimesheetDaysData);
         }).catch(error => {
             console.log(error);
             this.openModal = false;
