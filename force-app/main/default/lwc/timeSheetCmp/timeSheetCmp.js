@@ -73,7 +73,7 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
-    @wire(getRoleSubordinateUsers)
+    @wire(getRoleSubordinateUsers, {currentUser: '$currentUserId' })
     wiredApprovers({ error, data }) {
         if (data) {
             // for (let key in data) {
@@ -82,7 +82,7 @@ export default class TimeSheetCmp extends LightningElement {
             // this.roleId = data;
             this.availableApprovers = data.map(approver => {
                 return {
-                    label: approver.Name,
+                    label: approver.Manager.Name,
                     value: approver.Id
                 }
             });
