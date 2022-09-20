@@ -1,5 +1,6 @@
 import { api, LightningElement, wire } from 'lwc';
 import getTimesheetId from '@salesforce/apex/TimesheetDataService.getTimesheetId';
+//import uId from '@salesforce/user/Id';
 
 
 const columns = [
@@ -15,6 +16,7 @@ const columns = [
 
 export default class ApprovalRequest extends LightningElement {
     @api recordId;
+    //userId= uId;
 
     @wire(getTimesheetId,{recordId:'$recordId'})
     timesheetData
