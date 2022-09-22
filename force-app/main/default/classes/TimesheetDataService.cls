@@ -32,43 +32,43 @@ public with sharing class TimesheetDataService {
 
     }
 
-    @AuraEnabled(cacheable=true)
-    public static List<Timesheet_day__c> getTimesheetId(String recordId) {
+    // @AuraEnabled(cacheable=true)
+    // public static List<Timesheet_day__c> getTimesheetId(String recordId) {
         
-        try {
-            System.debug('recordid'+recordId);
+    //     try {
+    //         System.debug('recordid'+recordId);
 
-                List<ProcessInstanceWorkitem> ProcessInstanceWorkitemIds = [SELECT ProcessInstanceId from ProcessInstanceWorkitem where Id= :recordId];
-                Set<Id> ProcessInstanceIdSet = new Set<Id>();
-                for(ProcessInstanceWorkitem p : ProcessInstanceWorkitemIds){
-                    ProcessInstanceIdSet.add(p.ProcessInstanceId);
-                }
+    //             List<ProcessInstanceWorkitem> ProcessInstanceWorkitemIds = [SELECT ProcessInstanceId from ProcessInstanceWorkitem where Id= :recordId];
+    //             Set<Id> ProcessInstanceIdSet = new Set<Id>();
+    //             for(ProcessInstanceWorkitem p : ProcessInstanceWorkitemIds){
+    //                 ProcessInstanceIdSet.add(p.ProcessInstanceId);
+    //             }
 
-                List<ProcessInstance> ProcessInstanceIds = [SELECT TargetObjectId, Status, CreatedDate, SubmittedBy.Name FROM ProcessInstance where (Id IN :ProcessInstanceIdSet  AND TargetObject.Type = 'Timesheet__c')];
-                Set<Id> TargetObjectIdSet = new Set<Id>();
-                for(ProcessInstance p : ProcessInstanceIds){
-                    TargetObjectIdSet.add(p.TargetObjectId);
-                }
-                List<Timesheet_day__c> timesheetDayData = [
-                    SELECT ID, name, Earning_Type__c, Timesheet_Date__c, Timesheet_month__c,Hours__c, Timesheet__r.name FROM Timesheet_day__c WHERE Timesheet__c IN :TargetObjectIdSet
-                    ];
+    //             List<ProcessInstance> ProcessInstanceIds = [SELECT TargetObjectId, Status, CreatedDate, SubmittedBy.Name FROM ProcessInstance where (Id IN :ProcessInstanceIdSet  AND TargetObject.Type = 'Timesheet__c')];
+    //             Set<Id> TargetObjectIdSet = new Set<Id>();
+    //             for(ProcessInstance p : ProcessInstanceIds){
+    //                 TargetObjectIdSet.add(p.TargetObjectId);
+    //             }
+    //             List<Timesheet_day__c> timesheetDayData = [
+    //                 SELECT ID, name, Earning_Type__c, Timesheet_Date__c, Timesheet_month__c,Hours__c, Timesheet__r.name FROM Timesheet_day__c WHERE Timesheet__c IN :TargetObjectIdSet
+    //                 ];
 
 
-                //System.debug('ProcessInstanceId '+ProcessInstanceId);
+    //             //System.debug('ProcessInstanceId '+ProcessInstanceId);
                 
-                //SELECT ProcessInstanceId from ProcessInstanceWorkitem where Id= '04i8d000000fJdbAAE'
-                //SELECT Id, TargetObjectId FROM ProcessInstance where (Id = '04g8d000001xlzNAAQ-ProcessInstanceId'  AND TargetObject.Type = 'Timesheet__c')
-                //SELECT Id, Name FROM Timesheet__c WHERE Id = 'TargetObjectId'
-                //SELECT Name FROM Timesheet_day__c WHERE Timesheet__r.name= 'August 2022 - Vidura Jayasinghe'
-            System.debug('timesheetdata'+timesheetDayData);
-            return timesheetDayData;
+    //             //SELECT ProcessInstanceId from ProcessInstanceWorkitem where Id= '04i8d000000fJdbAAE'
+    //             //SELECT Id, TargetObjectId FROM ProcessInstance where (Id = '04g8d000001xlzNAAQ-ProcessInstanceId'  AND TargetObject.Type = 'Timesheet__c')
+    //             //SELECT Id, Name FROM Timesheet__c WHERE Id = 'TargetObjectId'
+    //             //SELECT Name FROM Timesheet_day__c WHERE Timesheet__r.name= 'August 2022 - Vidura Jayasinghe'
+    //         System.debug('timesheetdata'+timesheetDayData);
+    //         return timesheetDayData;
 
-            } 
-            catch (Exception e) {
-                    //System.debug('Exception: ' + e.getMessage());
-                    return null;
-                }
-            }
+    //         } 
+    //         catch (Exception e) {
+    //                 //System.debug('Exception: ' + e.getMessage());
+    //                 return null;
+    //             }
+    //         }
 
 
             @AuraEnabled(cacheable=true)
