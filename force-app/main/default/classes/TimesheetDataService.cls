@@ -11,6 +11,7 @@ public with sharing class TimesheetDataService {
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
+        System.debug('pre'+previousTimesheets);
         return previousTimesheets;
     }
 
@@ -21,12 +22,14 @@ public with sharing class TimesheetDataService {
                 SELECT ID, Name FROM Timesheet__c
                 WHERE Name = :timePeriod AND CreatedById = :currentUser
             ];
-
+            System.debug('timeperiod '+timePeriod);
             return recentTimesheets;
+
         } catch (Exception e) {
             System.debug('Exception: ' + e.getMessage());
             return null;
         }
+
     }
 
     @AuraEnabled(cacheable=true)
@@ -171,6 +174,7 @@ public with sharing class TimesheetDataService {
         } catch (Exception e) {
             System.debug('Exception: ' + e.getMessage());
         }
+        System.debug('earnings '+earnings);
         return earnings;
     }
 

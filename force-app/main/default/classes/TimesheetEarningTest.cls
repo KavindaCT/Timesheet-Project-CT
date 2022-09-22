@@ -79,7 +79,7 @@ public class TimesheetEarningTest {
 
         List<TimesheetEarning.earningsWrapper> earnings = TimesheetEarning.getEarnings(timesheetDays);
 
-        System.debug(earnings);
+        System.debug('output '+timesheetDays);
         System.assertEquals(5, earnings.size());
     }
 }
