@@ -1,4 +1,6 @@
 public with sharing class TimesheetDataService {
+    public class SubmitException extends Exception {}
+
     @AuraEnabled(cacheable=true)
     public static List<Timesheet__c> getPreviousTimesheets(String currentUserId) {
         List<Timesheet__c> previousTimesheets = new List<Timesheet__c>();
@@ -179,7 +181,7 @@ public with sharing class TimesheetDataService {
     }
 
     @AuraEnabled
-    public static void insertTimesheetDays(List<Map<String, Object>> timesheetDays, String timesheetId){
+    public static void insertTimesheetDays(List<Map<String, Object>> timesheetDays, String timesheetId, String methodType){
         // [ { id: 10, earningType: 'ordinary', hours: [ { id: '', name: '', day: '', hours: 0} ], weekNUmber: 1 }, ]
         Id id = Id.valueOf(timesheetId);
         List<Timesheet_Day__c> timesheetDaysDataUpsert = new List<Timesheet_Day__c>();
@@ -280,10 +282,15 @@ public with sharing class TimesheetDataService {
                     }
                 }
             }
-            // System.debug(timesheetDaysDataUpsert);
-            upsert timesheetDaysDataUpsert;
-            delete timesheetDaysDataDelete;
+            if(timesheetDaysDataUpsert.size() > 0 || methodType =='draft'){
+                upsert timesheetDaysDataUpsert;
+                delete timesheetDaysDataDelete;
+            }else{
+                throw new SubmitException('Your daily working hour limit should be between 9 and 24 hours');
+            }
+
         } catch (Exception e) {
+            System.debug('exception '+e.getMessage());
             throw new AuraHandledException(e.getMessage());
         }
     }
