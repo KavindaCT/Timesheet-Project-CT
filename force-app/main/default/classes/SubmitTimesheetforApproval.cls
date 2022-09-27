@@ -6,6 +6,7 @@ public class SubmitTimesheetforApproval {
     public static void submitForApproval(String timesheetId, String approverId){
         Id recordId = Id.valueOf(timesheetId);
         Id approver = Id.valueOf(approverId);
+        System.debug('idapprover'+approver);
         List<Id> approvers = new List<Id>{approver};
 
         // Create an approval request for Timesheet        
