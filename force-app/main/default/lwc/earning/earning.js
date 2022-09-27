@@ -19,6 +19,7 @@ export default class Earning extends LightningElement {
             }*/
             for (let i = 1; i < 6; i++) {
                 if (this.earning.hours.length > 0) { // i = 5
+                    console.log('dcsccasc' +this.earning.hours.length );
                     let earningHours = this.earning.hours.find(earning => earning.day.charAt(0) === i.toString());
                     if (earningHours) {
                         this.template.querySelector(`[data-id="${i}"]`).value = earningHours.hours;
@@ -53,7 +54,8 @@ export default class Earning extends LightningElement {
             { label: 'Ordinary Hours', value: 'Ordinary Hours' },
             { label: 'Full Day Leave', value: 'Full Day Leave' },
             { label: 'Half Day Leave', value: 'Half Day Leave' },
-            { label: 'Sick Leave', value: 'Sick Leave' }
+            { label: 'Sick Leave', value: 'Sick Leave' },
+            { label: 'Holiday', value: 'Holiday' }
         ];
     }
 

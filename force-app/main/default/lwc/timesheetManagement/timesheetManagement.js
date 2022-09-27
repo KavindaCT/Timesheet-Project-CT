@@ -36,6 +36,7 @@ export default class TimesheetManagement extends LightningElement {
     wiredPreviousTimesheets({ error, data }) {
         if (data) {
             this.previousTimesheets = data.filter(timesheet => timesheet.Status__c !== 'Draft');
+            console.log('pre'+this.previousTimesheets);
         } else if (error) {
             console.log(error);
         }
