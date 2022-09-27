@@ -114,7 +114,7 @@ export default class TimeSheetCmp extends LightningElement {
         this.openModal = true;
         this.isLoading = true;
 
-        insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
+        insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId, methodType: 'submit' }).then(result => {
             console.log(result);
             this.isLoading = false;
         }).catch(error => {
@@ -124,7 +124,7 @@ export default class TimeSheetCmp extends LightningElement {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Something went wrong!',
-                    message: 'Your changes not saved, Please try again later',
+                    message: 'Your daily working hour limit should be between 9 and 24 hours',
                     variant: 'error'
                 })
             );
@@ -277,10 +277,10 @@ export default class TimeSheetCmp extends LightningElement {
 
     handleClickDraft() {
 
-        insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
+        insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId, methodType: 'draft' }).then(result => {
             this.dispatchEvent(
                 new ShowToastEvent({
-                    title: 'Success! Your hours successfully saved',
+                    title: 'Success! Your hours successfully updated',
                     variant: 'success'
                 })
             );
@@ -290,7 +290,7 @@ export default class TimeSheetCmp extends LightningElement {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Something went wrong!',
-                    message: 'Check whether you have reached daily working hours goal',
+                    message: 'Your daily working hour limit should be between 9 and 24 hours',
                     variant: 'error'
                 })
             );

@@ -18,7 +18,6 @@ export default class Week extends LightningElement {
         this.weekDays = [];
         var weekStart = new Date(this.currentWeek.weekStart);
         var weekEnding = new Date(this.currentWeek.weekEnding);
-
         // { dayId: 0, day: 'Mon', date: '01 May', disabled: boolean };
         /*
         *
@@ -60,7 +59,7 @@ export default class Week extends LightningElement {
         */
         for (let i = 1; i < 7; i++) {
             var date = new Date(weekStart);
-
+            console.log(date);
             if (i < weekStart.getDay()) {
                 date.setDate(weekStart.getDate() - (weekStart.getDay() - i));
                 this.weekDays.push({
@@ -97,7 +96,6 @@ export default class Week extends LightningElement {
             day: this.daysOfWeek[0],
             disabled: true
         });
-
     }
 
     @api
@@ -107,6 +105,7 @@ export default class Week extends LightningElement {
 
     set earningData(value) {
         this.earnings = value; // value - [{ id: '10', earningType: '', hours: [], weekNumber: '' }]
+        console.log('VALUES '+JSON.stringify(value));
         if(value) {
             const earningObj = value[value.length - 1];
             this.tempEarningId = parseInt(earningObj.id, 10) + 1;
@@ -123,12 +122,13 @@ export default class Week extends LightningElement {
         if(this.tempEarningId && this.weekNumber) {
             const newEarning = {
                 id: this.tempEarningId,
-                earningType: '',
+                earningType: 'Half Day Leave',
                 hours: [],
                 weekNumber: this.weekNumber,
                 deleteFlag: false
             }
             this.dispatchEvent(new CustomEvent('newearning', { detail: newEarning }));
+            console.log('ooo');
         }
         this.tempEarningId += 1;
     }
