@@ -179,7 +179,7 @@ public with sharing class TimesheetDataServiceTest {
             // String timesheetId = 'a008d000006FnUeAAK';
             
             system.debug('timesheetDays' + timesheetDays);
-            TimesheetDataService.insertTimesheetDays(timesheetDays, previousTimesheetDay.Timesheet__c);
+            TimesheetDataService.insertTimesheetDays(timesheetDays, previousTimesheetDay.Timesheet__c, 'draft');
                
             Timesheet_Day__c updatedDay = [SELECT Name, Hours__c FROM Timesheet_Day__c WHERE Id =: previousTimesheetDay.Id];
                
@@ -213,7 +213,7 @@ public with sharing class TimesheetDataServiceTest {
             // String timesheetId = 'a008d000007h5VZAAY';
             // 
                
-            TimesheetDataService.insertTimesheetDays(timesheetDays, timesheetId.Id);
+            TimesheetDataService.insertTimesheetDays(timesheetDays, timesheetId.Id, 'draft');
             // List<Timesheet_Day__c> ordinaryHours = [SELECT Earning_Type__c FROM Timesheet_Day__c WHERE Timesheet__c =: timesheetId.Id];
             // String earningType =  String.valueOf(ordinaryHours.Timesheet_Day__c.Earning_Type__c);
             // String earningType; 
@@ -240,7 +240,7 @@ public with sharing class TimesheetDataServiceTest {
                 timesheetDays.add((Map<String, Object>) obj);
             }
             // String timesheetId = 'a008d000007h5VZAAY';
-            TimesheetDataService.insertTimesheetDays(timesheetDays, previousTimesheetDay.Timesheet__c);
+            TimesheetDataService.insertTimesheetDays(timesheetDays, previousTimesheetDay.Timesheet__c, 'draft');
                
             List<Timesheet_Day__c> newDays = [SELECT Id, Name FROM Timesheet_Day__c WHERE Id =: previousTimesheetDay.Id];
                
