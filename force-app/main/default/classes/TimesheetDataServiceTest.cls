@@ -33,7 +33,7 @@ public with sharing class TimesheetDataServiceTest {
             insert(previousTimesheets);
 
             Timesheet__c timesheet = new Timesheet__c(
-                Name = 'August 2022',
+                Name = 'August 2022 - Kavinda Dilanka',
                 Status__c = 'Draft'
             );
             insert(timesheet);
@@ -91,7 +91,7 @@ public with sharing class TimesheetDataServiceTest {
             // System.debug('size'+timesheets.size());
             // System.debug(previousTimesheets);
             
-            System.assertEquals(2, timesheets.size());
+            System.assertEquals(previousTimesheets.size(), timesheets.size());
 
     	}
            
@@ -114,12 +114,12 @@ public with sharing class TimesheetDataServiceTest {
               //system.debug('testrecentTimesheets'+ testrecentTimesheets.CreatedBy.Name);
                 
               recentTimesheets = TimesheetDataService.getRecentTimesheet('September 2022 - Kavinda Dilanka', cUser.Id);
-              System.assertEquals(1, recentTimesheets.size());
+              System.assertEquals(testrecentTimesheets.size(), recentTimesheets.size());
 			}
         }
 
 
-            @isTest static void testgetTimesheetId(){
+        @isTest static void testgetTimesheetId(){
 
                 List<ProcessInstanceWorkitem> testgetTimesheets = new List<ProcessInstanceWorkitem>();
                 

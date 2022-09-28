@@ -7,23 +7,26 @@ public with sharing class RoleHierachyTest {
         User u = new User(Alias = 'standt', Email='standarduser@testorg.com', 
         EmailEncodingKey='UTF-8', LastName='Testing', LanguageLocaleKey='en_US', 
         LocaleSidKey='en_US', ProfileId = p.Id, 
-        TimeZoneSidKey='America/Los_Angeles', UserName='standarduser@testorg.com' );
+        TimeZoneSidKey='America/Los_Angeles', UserName='standarduserrole@testorg.com' );
 
-        User manager = new User(Alias = 'standtmgt', Email='standardmanager@testorg.com', 
+        User manager = new User(Alias = 'standtmg', Email='standardmanager@testorg.com', 
         EmailEncodingKey='UTF-8', LastName='TestingMgt', LanguageLocaleKey='en_US', 
         LocaleSidKey='en_US', ProfileId = p.Id, 
-        TimeZoneSidKey='America/Los_Angeles', UserName='standardmanager@testorg.com', ManagerId = u.Id);
+        TimeZoneSidKey='America/Los_Angeles', UserName='standardmanagerrole@testorg.com', ManagerId = u.Id);
 
         insert u;
         insert manager;
         }
     @isTest static void testgetRoleSubordinateUsers() {
 
-      /*  List<User> testusers = new List<User>([SELECT Name, ManagerId, Manager.Name FROM User]);
-        
-        List<User> actualUsers = RoleHierachy.getRoleSubordinateUsers(u.Id);
+        List<User> testusers = new List<User>([SELECT Id, Name, ManagerId, Manager.Name FROM User WHERE Email = 'standarduser@testorg.com']);
+        User cUser  =  [SELECT Id FROM User WHERE Email = 'standarduser@testorg.com' ];
 
-        System.assertEquals(testusers.size(), actualUsers.size());*/
+        List<User> actualUsers = RoleHierachy.getRoleSubordinateUsers(cUser.Id);
+
+        System.assertEquals(testusers.size(), actualUsers.size());
 
     }
+    
+    
 }
