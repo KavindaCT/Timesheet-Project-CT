@@ -9,7 +9,6 @@ trigger TimesheetValidationTrigger on Timesheet_Day__c (before insert,before upd
         Decimal Hours = t.Hours__c;
         System.debug('***testhours*** '+Hours);
         AggregateResult [] days = [SELECT Timesheet_Date__c, sum(Hours__c)amount FROM Timesheet_Day__c WHERE Timesheet__c =: ids AND CreatedById =:createdId group by Timesheet_Date__c];
-        // System.debug('result'+days);
         
 
         for(AggregateResult ag : days){

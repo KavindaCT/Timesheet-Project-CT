@@ -7,7 +7,8 @@
             <lightning-spinner alternative-text="Loading" size="small" variant="brand"></lightning-spinner>
         </template>
         <template if:true={haveId}>
-            <c-time-sheet-cmp time-period={timePeriod} timesheet-id={timesheetId} onresetview={resetView}></c-time-sheet-cmp>
+            <c-time-sheet-cmp time-period={timePeriod} timesheet-id={timesheetId} onresetview={resetView}>
+            </c-time-sheet-cmp>
         </template>
     </template>
 </template>

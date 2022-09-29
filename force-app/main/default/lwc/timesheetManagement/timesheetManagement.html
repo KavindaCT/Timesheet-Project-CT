@@ -90,7 +90,9 @@
 
     <!-- ************************************** New View *************************************** -->
     <template if:false={timesheetsToShow}>
-      <div class="slds-align_absolute-center slds-scrollable_y">No Previous Timesheets available</div>
+      <div class="slds-align_absolute-center slds-scrollable_y">
+        No Previous Timesheets available
+      </div>
     </template>
     <template if:true={timesheetsToShow}>
       <template if:true={showSpinner}>
@@ -126,7 +128,9 @@
             </lightning-icon>
             <span class="slds-assistive-text">Close</span>
           </button>
-          <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add Timesheet</h2>
+          <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+            Add Timesheet
+          </h2>
         </header>
         <div class="slds-modal__content slds-var-p-around_medium" id="modal-content-id-1">
           <c-add-timesheet current-user-full-name={fullName} current-user-id={currentUserId}

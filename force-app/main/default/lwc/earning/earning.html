@@ -2,7 +2,8 @@
     <lightning-layout if:true={earning}>
         <!-- BEGIN::Earning Type -->
         <lightning-layout-item size="3" class="slds-var-p-right_small">
-            <lightning-combobox data-id="earning-type" name="earningType" onchange={handleEarningChange} options={earningTypes} disabled={readOnly}>
+            <lightning-combobox data-id="earning-type" name="earningType" onchange={handleEarningChange}
+                options={earningTypes} disabled={readOnly}>
             </lightning-combobox>
         </lightning-layout-item>
         <!-- END::Earning Type -->
@@ -14,15 +15,16 @@
         </lightning-layout-item>
         <lightning-layout-item size="1">
             <div class="slds-var-m-top_large">
-                <lightning-formatted-number data-id="total-hours" class={getTotalHoursClass} minimum-fraction-digits="2">
+                <lightning-formatted-number data-id="total-hours" class={getTotalHoursClass}
+                    minimum-fraction-digits="2">
                 </lightning-formatted-number>
             </div>
         </lightning-layout-item>
         <lightning-layout-item size="1">
             <div class="slds-var-m-top_large">
                 <lightning-button-icon icon-name="utility:close" size="x-small" alternative-text="Remove Item"
-                title="Remove Item" onclick={handleRemoveEarning} disabled={readOnly}>
-            </lightning-button-icon>
+                    title="Remove Item" onclick={handleRemoveEarning} disabled={readOnly}>
+                </lightning-button-icon>
             </div>
         </lightning-layout-item>
     </lightning-layout>

@@ -7,7 +7,7 @@
                         Earnings Rate
                     </lightning-layout-item>
                     <lightning-layout-item size="1" for:each={weekDays} for:item="weekday" key={weekday.day}>
-                        {weekday.day}<br>{weekday.date}
+                        {weekday.day}<br />{weekday.date}
                     </lightning-layout-item>
                     <lightning-layout-item size="1">
                         <div>Hours</div>
@@ -17,17 +17,19 @@
             <!-- BEGIN::Earnings -->
             <lightning-layout-item size="12" for:each={earnings} for:item="earning" key={earning.Id}>
                 <c-earning earning-data={earning} week-days={weekDays} onremove={removeEarning}
-                    onchangevalue={changeValue} onchangeearning={handleChangeEarningType} read-only={readOnly}></c-earning>
+                    onchangevalue={changeValue} onchangeearning={handleChangeEarningType} read-only={readOnly}>
+                </c-earning>
             </lightning-layout-item>
             <!-- BEGIN::Earnings -->
             <!-- BEGIN::Add another row button -->
             <lightning-layout-item class="slds-var-m-top_small">
-                <lightning-button label="+ Add another line" onclick={addNewEarning} disabled={readOnly}></lightning-button>
+                <lightning-button label="+ Add another line" onclick={addNewEarning} disabled={readOnly}>
+                </lightning-button>
             </lightning-layout-item>
             <!-- END::Add another row button -->
         </template>
         <template if:false={earnings}>
-            <lightning-layout-item size="12" style="position:relative">
+            <lightning-layout-item size="12" style="position: relative">
                 <lightning-spinner alternative-text="Loading" size="small" variant="brand"></lightning-spinner>
             </lightning-layout-item>
         </template>
