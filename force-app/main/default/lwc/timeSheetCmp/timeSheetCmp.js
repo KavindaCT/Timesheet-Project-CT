@@ -249,6 +249,7 @@ export default class TimeSheetCmp extends LightningElement {
 
   handleChangeValue(event) {
     var newTimesheetDays = JSON.parse(JSON.stringify(this.timesheetDays));
+    var recordDate = event.detail.date;
     const dayId = event.detail.dayId;
     this.monthlyTotal = "";
 
@@ -267,14 +268,17 @@ export default class TimeSheetCmp extends LightningElement {
       if (hoursindex > -1) {
         newTimesheetDays[index].hours[hoursindex].hours = event.detail.value;
       } else {
+        let getDate = recordDate.substring(recordDate.length - 2, recordDate.length);
+
         let date = new Date(
-          `${event.detail.date}${this.timePeriod.substring(0, 11)}`
+          `${getDate} ${this.timePeriod.substring(0, this.timePeriod.indexOf('-'))}`
         );
+
         newTimesheetDays[index].hours.push({
           name:
             event.detail.name +
             " " +
-            this.timePeriod.substring(0, 11) +
+            this.timePeriod.substring(0, this.timePeriod.indexOf('-')) +
             "-" +
             newTimesheetDays[index].earningType,
           hours: event.detail.value,
