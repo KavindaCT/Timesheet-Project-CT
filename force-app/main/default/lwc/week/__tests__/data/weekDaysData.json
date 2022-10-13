@@ -1,0 +1,44 @@
+[
+    {
+        "dayId": 1,
+        "date": "Oct 03",
+        "day": "Mon",
+        "disabled": false
+    },
+    {
+        "dayId": 2,
+        "date": "Oct 04",
+        "day": "Tue",
+        "disabled": false
+    },
+    {
+        "dayId": 3,
+        "date": "Oct 05",
+        "day": "Wed",
+        "disabled": false
+    },
+    {
+        "dayId": 4,
+        "date": "Oct 06",
+        "day": "Thu",
+        "disabled": false
+    },
+    {
+        "dayId": 5,
+        "date": "Oct 07",
+        "day": "Fri",
+        "disabled": false
+    },
+    {
+        "dayId": 6,
+        "date": "Oct 08",
+        "day": "Sat",
+        "disabled": true
+    },
+    {
+        "dayId": 7,
+        "date": "Oct 09",
+        "day": "Sun",
+        "disabled": true
+    }
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "deleteFlag": false,
+        "earningType": "Ordinary Hours",
+        "hours": [
+            {
+                "day": "1Mon",
+                "hours": 10,
+                "id": "a018d000009cforAAA",
+                "Name": "TD04 July 2022-Ordinary Hours",
+                "timesheet_month": "July"
+            }
+        ],
+        "id": "10",
+        "weekNumber": 1
+    }
+]
+    
