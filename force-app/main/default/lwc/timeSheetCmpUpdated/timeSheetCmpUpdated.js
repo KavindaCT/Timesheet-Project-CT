@@ -7,12 +7,17 @@ import getRoleSubordinateUsers from '@salesforce/apex/RoleHierachy.getRoleSubord
 import insertTimesheetDays from '@salesforce/apex/TimesheetDataService.insertTimesheetDays';
 import STATUS_FIELD from '@salesforce/schema/Timesheet__c.Status__c';
 import MONTHLY_TOT_FIELD from '@salesforce/schema/Timesheet__c.Monthly_Total__c';
+import NAME_FIELD from '@salesforce/schema/Timesheet__c.Name';
 import uId from '@salesforce/user/Id';
 import { getRecord } from 'lightning/uiRecordApi';
+import getTimesheetIdFromWorkitemId from '@salesforce/apex/TimesheetDataService.getTimesheetIdFromWorkitemId';
+import CallObject from '@salesforce/schema/Task.CallObject';
 
-const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD];
+const fields = [STATUS_FIELD, MONTHLY_TOT_FIELD, NAME_FIELD];
 const STATUS = ['Submitted', 'Approved'];
 export default class TimeSheetCmp extends LightningElement {
+    
+    //approvalId;
     @api timePeriod;
     @api timesheetId;
     activeWeek; // Only contains weekStart and weekEnding
@@ -22,7 +27,7 @@ export default class TimeSheetCmp extends LightningElement {
     @track timesheetDays;
     @track timesheetDaysPerWeek;
     availableApprovers = [];
-    currentUserId = uId;
+    currentUserId;
     approverId;
     roleId;
     isLoading = true;
@@ -32,6 +37,28 @@ export default class TimeSheetCmp extends LightningElement {
     timesheetBasicData;
     timesheetStatus;
     monthlyTotal = 0;
+    id = '';
+
+
+    @api get recordId(){
+        return this.id;
+    }
+
+    set recordId(value){
+        this.id = value;
+        if(value){
+            getTimesheetIdFromWorkitemId({recordId : this.id}).then(result => {
+                console.log('timesheetid  '+JSON.stringify(result));
+                console.log('key'+Object.keys(result));
+                this.timesheetId = Object.keys(result)[0];
+
+                this.currentUserId = Object.values(result)[0];
+
+                console.log('currentUserId'+this.currentUserId);
+            });
+        }
+        
+    }
 
     @wire(getRecord, { recordId: '$timesheetId', fields })
     getTimesheetData(results) {
@@ -46,6 +73,7 @@ export default class TimeSheetCmp extends LightningElement {
             } else {
                 this.readOnly = false;
             }
+            this.timePeriod = this.timesheetBasicData.fields.Name.value;
             this.timesheetStatus = this.timesheetBasicData.fields.Status__c.value;
             this.monthlyTotal = this.timesheetBasicData.fields.Monthly_Total__c.value;
         } else if (error) {
@@ -58,10 +86,13 @@ export default class TimeSheetCmp extends LightningElement {
         this.wiredTimesheetDaysData = results;
 
         const { error, data } = results;
+        console.log('inside timesheetdays wire');
+        console.log('userid'+ this.currentUserId);
+        console.log('timesheetid'+ this.timesheetId);
         if (data) {
             this.timesheetDays = data;
             this.timesheetDaysPerWeek = this.timesheetDays.filter(day => day.weekNumber === this.activeWeekNumber);
-            // console.log(this.timesheetDaysPerWeek);
+            console.log(JSON.stringify(this.timesheetDaysPerWeek));
         } else if (error) {
             this.dispatchEvent(
                 new ShowToastEvent({
@@ -73,7 +104,7 @@ export default class TimeSheetCmp extends LightningElement {
         }
     }
 
-    @wire(getRoleSubordinateUsers, {currentUser: '$currentUserId' })
+    @wire(getRoleSubordinateUsers)
     wiredApprovers({ error, data }) {
         if (data) {
             // for (let key in data) {
@@ -82,7 +113,7 @@ export default class TimeSheetCmp extends LightningElement {
             // this.roleId = data;
             this.availableApprovers = data.map(approver => {
                 return {
-                    label: approver.Manager.Name,
+                    label: approver.Name,
                     value: approver.Id
                 }
             });
@@ -106,6 +137,13 @@ export default class TimeSheetCmp extends LightningElement {
         return this.approverId == null ? true : false;
     }
 
+    // @api get approvalId(){
+    //     return this.approvalId;
+    // }
+    // set approvalId(value){
+    //     this.approvalId = value;
+    // }
+
     handleChangeApprover(event) {
         this.approverId = event.target.value;
     }
@@ -117,8 +155,6 @@ export default class TimeSheetCmp extends LightningElement {
         insertTimesheetDays({ timesheetDays: this.timesheetDays, timesheetId: this.timesheetId }).then(result => {
             console.log(result);
             this.isLoading = false;
-            refreshApex(this.wiredTimesheetData);
-            refreshApex(this.wiredTimesheetDaysData);
         }).catch(error => {
             console.log(error);
             this.openModal = false;
@@ -126,7 +162,7 @@ export default class TimeSheetCmp extends LightningElement {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Something went wrong!',
-                    message: 'Your daily working hour limit should be between 9 and 24 hours',
+                    message: 'Your changes not saved, Please try again later',
                     variant: 'error'
                 })
             );
@@ -292,7 +328,7 @@ export default class TimeSheetCmp extends LightningElement {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Something went wrong!',
-                    message: 'Your daily working hour limit should be between 9 and 24 hours',
+                    message: 'Check whether you have reached daily working hours goal',
                     variant: 'error'
                 })
             );

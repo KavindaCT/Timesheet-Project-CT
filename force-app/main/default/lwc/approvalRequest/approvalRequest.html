@@ -1,0 +1,13 @@
+<template>
+    <lightning-layout>
+        <!-- <h1>{userId}</h1>
+        <h1>{recordId}</h1> -->
+       <div style="height: 300px;">
+        <lightning-datatable
+                key-field="id"
+                data={timesheetData.data}
+                columns={columns}>
+        </lightning-datatable>
+    </div>
+    </lightning-layout>
+</template>

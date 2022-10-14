@@ -53,7 +53,8 @@ export default class Earning extends LightningElement {
             { label: 'Ordinary Hours', value: 'Ordinary Hours' },
             { label: 'Full Day Leave', value: 'Full Day Leave' },
             { label: 'Half Day Leave', value: 'Half Day Leave' },
-            { label: 'Sick Leave', value: 'Sick Leave' }
+            { label: 'Sick Leave', value: 'Sick Leave' },
+            { label: 'Holiday', value: 'Holiday' }
         ];
     }
 
